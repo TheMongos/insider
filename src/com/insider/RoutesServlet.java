@@ -1,7 +1,5 @@
 package com.insider;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,14 +7,7 @@ import javax.ws.rs.Produces;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import db.mysql.Category;
-import db.mysql.CategoryJDBCTemplate;
-import db.mysql.Item;
-import db.mysql.ItemJDBCTemplate;
-import db.mysql.Review;
-import db.mysql.ReviewJDBCTemplate;
-import db.mysql.User;
-import db.mysql.UserJDBCTemplate;
+import db.redis.RedisTest;
 
 @Path("/")
 public class RoutesServlet {
@@ -24,6 +15,11 @@ public class RoutesServlet {
 	@Produces("text/plain")
 	public String index() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+		
+		//redis check
+		
+		RedisTest rd = (RedisTest)context.getBean("redisTest");
+		rd.simpleValueOperations();
 
 		// item check
 
