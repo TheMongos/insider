@@ -1,5 +1,9 @@
 package com.insider;
 
+
+
+import java.util.Set;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -13,14 +17,30 @@ import db.redis.RedisTest;
 public class RoutesServlet {
 	@GET
 	@Produces("text/plain")
+	//@Produces("application/json")
 	public String index() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 		
 		//redis check
 		
 		RedisTest rd = (RedisTest)context.getBean("redisTest");
-		rd.simpleValueOperations();
+//		rd.addUserRankID(2, 2, 3, "some movie", 0);
+//		rd.addUserRankID(2, 3, 4, "some movie2", 15);
+		
+		//String res = rd.getUserRankID(2, 3);
 
+		
+//		rd.addTitleRank(3, 5);
+		Set<String> res = rd.getTitleRanks(3);
+		
+		
+//		rd.addUserFollowing(2, 3);
+//		rd.addUserFollowing(2, 5);
+		Set<String> followingSet = rd.getUserFollowing(2);
+		
+		res.retainAll(followingSet);
+		
+		
 		// item check
 
 		//		ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
@@ -136,6 +156,6 @@ public class RoutesServlet {
 		//		reviewJDBCTemplate.delete(2);
 
 
-		return "insider app";
+		return res.toString() +  " " + followingSet.toString();
 	}
 }
