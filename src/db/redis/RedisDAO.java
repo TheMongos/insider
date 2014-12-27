@@ -52,6 +52,7 @@ public interface RedisDAO {
 	 * This is the method to be used to get the user followers list.
 	 */
 	public List<String> getUserFollowers(int user_id);
+	
 	/**
 	 * This is the method to add or update user rank to an item - without a review.
 	 */
@@ -63,5 +64,9 @@ public interface RedisDAO {
 	 */
 	public void addRankToItem(int user_id, int item_id, int category_id, int rank, int review_id);
 	
+	/**
+	 * This is the method to be used to get the item ranks and counters for a specific user.
+	 */
+	public ItemRanks getItemRanks(int item_id, int user_id);
 	
 }

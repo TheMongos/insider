@@ -6,7 +6,7 @@ public class Review {
 	private int review_id;
 	private int user_id;
 	private int item_id;
-	private byte rank;
+	//private byte rank;
 	private String review_text;
 	private Timestamp created_ts;
 	private Timestamp updated_ts;
@@ -45,12 +45,12 @@ public class Review {
 	public void setItem_id(int item_id) {
 		this.item_id = item_id;
 	}
-	public byte getRank() {
-		return rank;
-	}
-	public void setRank(byte rank) {
-		this.rank = rank;
-	}
+//	public byte getRank() {
+//		return rank;
+//	}
+//	public void setRank(byte rank) {
+//		this.rank = rank;
+//	}
 	public String getReview_text() {
 		return review_text;
 	}

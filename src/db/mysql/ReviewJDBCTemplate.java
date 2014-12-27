@@ -22,7 +22,6 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 				+ " (review_id INT NOT NULL AUTO_INCREMENT"
 				+ ", user_id INT "
 				+ ", item_id INT NOT NULL "
-				+ ", rank TINYINT NOT NULL"
 				+ ", review_text VARCHAR(500) NOT NULL "
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
 				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
@@ -41,11 +40,11 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 	}
 
 	@Override
-	public void create(int user_id, int item_id, byte rank, String review_text) {
-		String SQL = "insert into Review (user_id, item_id, rank, review_text)"
-				+ " values (?, ?, ?, ?)";
+	public void create(int user_id, int item_id, String review_text) {
+		String SQL = "insert into Review (user_id, item_id, review_text)"
+				+ " values (?, ?, ?)";
 
-		jdbcTemplateObject.update(SQL, user_id, item_id, rank, review_text);
+		jdbcTemplateObject.update(SQL, user_id, item_id, review_text);
 		return;
 		
 	}

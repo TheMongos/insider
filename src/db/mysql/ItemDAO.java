@@ -14,7 +14,7 @@ public interface ItemDAO {
 	/**
 	 * This is the method to be used to create a record in the Item table.
 	 */
-	public void create(byte category, String title, String year,
+	public Long create(byte category, String title, String year,
 			String description, String other_data);
 
 	/**

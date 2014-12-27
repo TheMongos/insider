@@ -1,10 +1,16 @@
 package db.mysql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 public class ItemJDBCTemplate implements ItemDAO {
 
@@ -39,14 +45,32 @@ public class ItemJDBCTemplate implements ItemDAO {
 	}
 
 	// @Override
-	public void create(byte category_id, String title, String year,
+	public Long create(byte category_id, String title, String year,
 			String description, String other_data) {
 		String SQL = "insert into Item (category_id, title, year, description"
 				+ ",other_data) values (?, ?, ?, ?, ?)";
 
-		jdbcTemplateObject.update(SQL, category_id, title, year, description,
-				other_data);
-		return;
+		//jdbcTemplateObject.update(SQL, category_id, title, year, description, other_data);
+		
+		KeyHolder holder = new GeneratedKeyHolder();
+
+		jdbcTemplateObject.update(new PreparedStatementCreator() {           
+
+		                @Override
+		                public PreparedStatement createPreparedStatement(Connection connection)
+		                        throws SQLException {
+		                    PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
+		                    ps.setByte(1, category_id);
+		                    ps.setString(2, title);
+		                    ps.setString(3, year);
+		                    ps.setString(4, description);
+		                    ps.setString(5, other_data);
+		                    return ps;
+		                }
+		            }, holder);
+
+		return (Long)holder.getKey();
+		
 	}
 
 	// @Override
