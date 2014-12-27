@@ -85,7 +85,7 @@
 		</property>
 	</bean>
 
-	<bean name="redisTest" class="db.redis.RedisTest">
+	<bean name="redisUtilsTemplate" class="db.redis.RedisUtilsTemplate">
 		<property name="redisTemplate" ref="redisTemplate" />
 	</bean>
 

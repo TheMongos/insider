@@ -1,9 +1,5 @@
 package com.insider;
 
-
-
-import java.util.Set;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,7 +7,7 @@ import javax.ws.rs.Produces;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import db.redis.RedisTest;
+import db.redis.RedisUtilsTemplate;
 
 @Path("/")
 public class RoutesServlet {
@@ -23,7 +19,7 @@ public class RoutesServlet {
 		
 		//redis check
 		
-		RedisTest rd = (RedisTest)context.getBean("redisTest");
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisTest");
 //		rd.addUserRankID(2, 2, 3, "some movie", 0);
 //		rd.addUserRankID(2, 3, 4, "some movie2", 15);
 		
@@ -31,14 +27,21 @@ public class RoutesServlet {
 
 		
 //		rd.addTitleRank(3, 5);
-		Set<String> res = rd.getTitleRanks(3);
+//		Set<String> res = rd.getTitleRanks(3);
 		
 		
 //		rd.addUserFollowing(2, 3);
 //		rd.addUserFollowing(2, 5);
-		Set<String> followingSet = rd.getUserFollowing(2);
+//		Set<String> followingSet = rd.getUserFollowing(2);
 		
-		res.retainAll(followingSet);
+//		res.retainAll(followingSet);
+		
+		
+//		rd.addUserFollowers(3, 4);
+//		rd.addUserFollowers(3, 2);
+//		
+//		List<String> res = rd.getUserFollowers(3);
+		
 		
 		
 		// item check
@@ -156,6 +159,8 @@ public class RoutesServlet {
 		//		reviewJDBCTemplate.delete(2);
 
 
-		return res.toString() +  " " + followingSet.toString();
+		return "hello";
+		//return res.toString() +  " " + followingSet.toString();
+//		return res.toString();
 	}
 }
