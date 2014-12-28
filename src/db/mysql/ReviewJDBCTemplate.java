@@ -1,10 +1,16 @@
 package db.mysql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 public class ReviewJDBCTemplate implements ReviewDAO {
 
@@ -40,12 +46,28 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 	}
 
 	@Override
-	public void create(int user_id, int item_id, String review_text) {
+	public Long create(int user_id, int item_id, String review_text) {
 		String SQL = "insert into Review (user_id, item_id, review_text)"
 				+ " values (?, ?, ?)";
 
-		jdbcTemplateObject.update(SQL, user_id, item_id, review_text);
-		return;
+		//jdbcTemplateObject.update(SQL, user_id, item_id, review_text);
+		
+		KeyHolder holder = new GeneratedKeyHolder();
+
+		jdbcTemplateObject.update(new PreparedStatementCreator() {           
+
+		                @Override
+		                public PreparedStatement createPreparedStatement(Connection connection)
+		                        throws SQLException {
+		                    PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
+		                    ps.setInt(1, user_id);
+		                    ps.setInt(2, item_id);
+		                    ps.setString(3, review_text);
+		                    return ps;
+		                }
+		            }, holder);
+
+		return (Long)holder.getKey();
 		
 	}
 

@@ -1,8 +1,15 @@
 package db.mysql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 public class UserJDBCTemplate implements UserDAO{
 
@@ -34,14 +41,31 @@ public class UserJDBCTemplate implements UserDAO{
 	}
 
 	@Override
-	public void create(String first_name, String last_name, String username,
+	public Long create(String first_name, String last_name, String username,
 			String email, String password) {
 		String SQL = "insert into User (first_name, last_name, username, email"
 				+ ",password) values (?, ?, ?, ?, ?)";
 
-		jdbcTemplateObject.update(SQL, first_name, last_name, username, email,
-				password);
-		return;
+		//jdbcTemplateObject.update(SQL, first_name, last_name, username, email, password);
+		
+		KeyHolder holder = new GeneratedKeyHolder();
+
+		jdbcTemplateObject.update(new PreparedStatementCreator() {           
+
+		                @Override
+		                public PreparedStatement createPreparedStatement(Connection connection)
+		                        throws SQLException {
+		                    PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
+		                    ps.setString(1, first_name);
+		                    ps.setString(2, last_name);
+		                    ps.setString(3, username);
+		                    ps.setString(4, email);
+		                    ps.setString(5, password);
+		                    return ps;
+		                }
+		            }, holder);
+
+		return (Long)holder.getKey();
 
 	}
 

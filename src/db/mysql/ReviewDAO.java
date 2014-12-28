@@ -13,7 +13,7 @@ public interface ReviewDAO {
 	/**
 	 * This is the method to be used to create a record in the Review table.
 	 */
-	public void create(int user_id, int item_id, String review_text);
+	public Long create(int user_id, int item_id, String review_text);
 
 	/**
 	 * This is the method to be used to list down a record from the Review table

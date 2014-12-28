@@ -12,7 +12,7 @@ public interface UserDAO {
 	/**
 	 * This is the method to be used to create a record in the User table.
 	 */
-	public void create(String first_name, String last_name,
+	public Long create(String first_name, String last_name,
 			String username, String email, String password);
 
 	/**

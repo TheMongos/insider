@@ -7,12 +7,9 @@ import javax.ws.rs.Produces;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import utils.ItemRes;
-import utils.Utils;
-
 import com.google.gson.Gson;
 
-import db.mysql.ItemJDBCTemplate;
+import db.mysql.UserJDBCTemplate;
 
 @Path("/")
 public class RoutesServlet {
@@ -52,17 +49,17 @@ public class RoutesServlet {
 		
 		// item check
 
-				ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
-		//
-				System.out.println("add item");
-				byte category_id = 1;
-				String title = "brother";
-				String year = "2002";
-				String description = "happy movie";
-				String other_data = ":) :) :)";
-				//Long res = itemJDBCTemplate.create(category_id, title, year, description,other_data);
-				int item_id = Utils.addItem(category_id, title, year, description, other_data).intValue();
-				ItemRes res = Utils.getItem(item_id, 0);
+//				ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
+//		
+//				System.out.println("add item");
+//				byte category_id = 1;
+//				String title = "brother";
+//				String year = "2002";
+//				String description = "happy movie";
+//				String other_data = ":) :) :)";
+//				//Long res = itemJDBCTemplate.create(category_id, title, year, description,other_data);
+//				int item_id = Utils.addItem(category_id, title, year, description, other_data).intValue();
+//				ItemRes res = Utils.getItem(item_id, 0);
 				
 		//
 		//		itemJDBCTemplate.updateDescription(1, "new new description");
@@ -106,16 +103,16 @@ public class RoutesServlet {
 
 		// user check
 
-		//		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
-		//
-		//				System.out.println("add user");
-		//				String first_name = "David";
-		//				String last_name = "Tzoor";
-		//				String username = "TheMan";
-		//				String email = "david@gmail.com";
-		//				String password = "david1234";
-		//				
-		//				userJDBCTemplate.create(first_name, last_name, username, email, password);
+//				UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
+//		
+//						System.out.println("add user");
+//						String first_name = "David";
+//						String last_name = "Tzoor";
+//						String username = "TheMan";
+//						String email = "david@gmail.com";
+//						String password = "david1234";
+//						
+//					Long res =	userJDBCTemplate.create(first_name, last_name, username, email, password);
 
 		//		userJDBCTemplate.delete(1);
 
@@ -139,13 +136,12 @@ public class RoutesServlet {
 		// review check
 
 //		ReviewJDBCTemplate reviewJDBCTemplate = (ReviewJDBCTemplate) context.getBean("reviewJDBCTemplate");
-
-		//				int user_id = 3;
-		//				int item_id = 1;
-		//				byte rank = 3;
-		//				String review_text ="ooooooooo";
-		//		
-		//				reviewJDBCTemplate.create(user_id, item_id, rank, review_text);
+//
+//						int user_id = 3;
+//						int item_id = 5;
+//						String review_text ="yoyoyo";
+//				
+//						Long res = reviewJDBCTemplate.create(user_id, item_id, review_text);
 
 		//		Review review = reviewJDBCTemplate.getReview(1);
 
@@ -168,7 +164,8 @@ public class RoutesServlet {
 		//		reviewJDBCTemplate.delete(2);
 
 
-		return gson.toJson(res);
+		return "hello insider";
+		//return gson.toJson(res);
 		//return res.toString() +  " " + followingSet.toString();
 //		return res.toString();
 	}
