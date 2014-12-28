@@ -6,7 +6,6 @@
 
 	<!-- Initialization for data source -->
 	<!--bean id="dataSource" class="db.mysql.DBConn"> </bean -->
-
 	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/insider" />
@@ -88,5 +87,4 @@
 	<bean name="redisUtilsTemplate" class="db.redis.RedisUtilsTemplate">
 		<property name="redisTemplate" ref="redisTemplate" />
 	</bean>
-
 </beans>
