@@ -7,6 +7,11 @@ import javax.ws.rs.Produces;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import utils.ItemRes;
+import utils.Utils;
+
+import com.google.gson.Gson;
+
 @Path("/")
 public class RoutesServlet {
 	@GET
@@ -14,9 +19,9 @@ public class RoutesServlet {
 	public String index() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 		
-		//Gson gson = new Gson();
+		Gson gson = new Gson();
 //		//redis check
-//		
+//	
 //		//RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisTest");
 ////		rd.addUserRankID(2, 2, 3, "some movie", 0);
 ////		rd.addUserRankID(2, 3, 4, "some movie2", 15);
@@ -54,7 +59,7 @@ public class RoutesServlet {
 ////				String other_data = ":) :) :)";
 ////				//Long res = itemJDBCTemplate.create(category_id, title, year, description,other_data);
 ////				int item_id = Utils.addItem(category_id, title, year, description, other_data).intValue();
-////				ItemRes res = Utils.getItem(item_id, 0);
+				ItemRes res = Utils.getItem(5, 0);
 //				
 //		//
 //		//		itemJDBCTemplate.updateDescription(1, "new new description");
@@ -159,8 +164,8 @@ public class RoutesServlet {
 //		//		reviewJDBCTemplate.delete(2);
 //
 //
-		return "hello insider";
-		//return gson.toJson(res);
+//		return "hello insider";
+		return gson.toJson(res);
 		//return res.toString() +  " " + followingSet.toString();
 		//return res.toString();
 	}
