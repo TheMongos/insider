@@ -22,6 +22,12 @@ public interface UserDAO {
 	public User getUser(Integer user_id);
 	
 	/**
+	 * This is the method to be used to list down a record from the User table
+	 * corresponding to a passed username.
+	 */
+	public int getUserByUsername(String username);
+	
+	/**
 	 * This is the method to be used to delete a record from the User table
 	 * corresponding to a passed user_id.
 	 */

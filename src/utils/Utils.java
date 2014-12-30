@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import db.mysql.ItemJDBCTemplate;
+import db.mysql.User;
+import db.mysql.UserJDBCTemplate;
 import db.redis.RedisUtilsTemplate;
 
 public class Utils {
@@ -48,5 +50,16 @@ public class Utils {
 		res.setItemDetails(itemJDBCTemplate.getItem(item_id));
 		res.setItemRanks(redisUtilsTemplate.getItemRanks(item_id, user_id));
 		return res;
+	}
+	
+	public static boolean isUsernameExist(String username) {
+		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
+		int count = userJDBCTemplate.getUserByUsername(username);
+		return (count == 0) ? false : true;
+	}
+	
+	public static long addNewUser(String firstName, String lastName, String username, String email, String password) {
+		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
+		return userJDBCTemplate.create(firstName, lastName, username, email, password);
 	}
 }

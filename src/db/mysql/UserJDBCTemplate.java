@@ -29,7 +29,7 @@ public class UserJDBCTemplate implements UserDAO{
 				+ ", last_name CHAR(35) NOT NULL "
 				+ ", username CHAR(30) NOT NULL"
 				+ ", email CHAR(255) NOT NULL"
-				+ ", password CHAR(64) NOT NULL"
+				+ ", password CHAR(60) NOT NULL"
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
 				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 				+ ", primary key (user_id)"
@@ -75,6 +75,15 @@ public class UserJDBCTemplate implements UserDAO{
 		User user = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { user_id }, new UserMapper());
 		return user;
+	}
+	
+	public int getUserByUsername(String username) {
+		String SQL = "select exists(select * from User where username = ?)";
+		int count = (Integer)jdbcTemplateObject.queryForObject(
+				SQL, new Object[] { username }, Integer.class);
+		//User user = jdbcTemplateObject.queryForObject(SQL,
+		//		new Object[] { username }, new UserMapper());
+		return count;
 	}
 
 	@Override
