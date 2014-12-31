@@ -1,11 +1,15 @@
 package com.insider;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 import utils.ItemRes;
 import utils.Utils;
@@ -17,12 +21,20 @@ public class ItemServlet {
 
 	@GET @Path("/id/{item_id}")
 	@Produces("application/json")
-	public String getItem(@PathParam("item_id") int item_id){
+	public String getItem(@PathParam("item_id") int item_id,
+			@Context HttpServletRequest request,
+			@Context HttpServletResponse response){
 		Gson gson = new Gson();
-		ItemRes res = Utils.getItem(item_id, 0);
-		return gson.toJson(res);
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			ItemRes res = Utils.getItem(item_id, (Integer)session.getAttribute("user_id"));
+			return gson.toJson(res);
+		} else {
+			response.setStatus(401);
+			return "{ status: 'failure', message: 'user not logged in.' }";
+		}
 	}
-	
+
 	@POST @Path("/{category_id}/{title}/{year}/{description}/{other_data}")
 	@Consumes("application/x-www-form-urlencoded")
 	@Produces("text/plain")

@@ -69,4 +69,8 @@ public interface RedisDAO {
 	 */
 	public ItemRanks getItemRanks(int item_id, int user_id);
 	
+	/**
+	 * This is the method to be used to list down all the ranks of the user following for item.
+	 */
+	public List<String> getFollowingItemRanks(int item_id, int user_id);
 }

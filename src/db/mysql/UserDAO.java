@@ -22,10 +22,17 @@ public interface UserDAO {
 	public User getUser(Integer user_id);
 	
 	/**
-	 * This is the method to be used to list down a record from the User table
+	 * This is the method to be used to check if user exist in the User table
 	 * corresponding to a passed username.
 	 */
-	public int getUserByUsername(String username);
+	public User getUserByUsername(String username);
+
+	/**
+	 * This is the method to be used to user from the User table
+	 * corresponding to a passed username.
+	 */
+	public boolean isUserExist(String username);
+	
 	
 	/**
 	 * This is the method to be used to delete a record from the User table

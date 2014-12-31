@@ -19,7 +19,7 @@ public class RoutesServlet {
 	public String index() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 		
-		Gson gson = new Gson();
+		//Gson gson = new Gson();
 //		//redis check
 //	
 //		//RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisTest");
@@ -59,7 +59,7 @@ public class RoutesServlet {
 ////				String other_data = ":) :) :)";
 ////				//Long res = itemJDBCTemplate.create(category_id, title, year, description,other_data);
 ////				int item_id = Utils.addItem(category_id, title, year, description, other_data).intValue();
-				ItemRes res = Utils.getItem(5, 0);
+//				ItemRes res = Utils.getItem(5, 0);
 //				
 //		//
 //		//		itemJDBCTemplate.updateDescription(1, "new new description");
@@ -164,8 +164,8 @@ public class RoutesServlet {
 //		//		reviewJDBCTemplate.delete(2);
 //
 //
-//		return "hello insider";
-		return gson.toJson(res);
+		return "hello insider";
+//		return gson.toJson(res);
 		//return res.toString() +  " " + followingSet.toString();
 		//return res.toString();
 	}

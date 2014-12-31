@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -47,23 +48,23 @@ public class UserJDBCTemplate implements UserDAO{
 				+ ",password) values (?, ?, ?, ?, ?)";
 
 		//jdbcTemplateObject.update(SQL, first_name, last_name, username, email, password);
-		
+
 		KeyHolder holder = new GeneratedKeyHolder();
 
 		jdbcTemplateObject.update(new PreparedStatementCreator() {           
 
-		                @Override
-		                public PreparedStatement createPreparedStatement(Connection connection)
-		                        throws SQLException {
-		                    PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
-		                    ps.setString(1, first_name);
-		                    ps.setString(2, last_name);
-		                    ps.setString(3, username);
-		                    ps.setString(4, email);
-		                    ps.setString(5, password);
-		                    return ps;
-		                }
-		            }, holder);
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection)
+					throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
+				ps.setString(1, first_name);
+				ps.setString(2, last_name);
+				ps.setString(3, username);
+				ps.setString(4, email);
+				ps.setString(5, password);
+				return ps;
+			}
+		}, holder);
 
 		return (Long)holder.getKey();
 
@@ -76,16 +77,26 @@ public class UserJDBCTemplate implements UserDAO{
 				new Object[] { user_id }, new UserMapper());
 		return user;
 	}
-	
-	public int getUserByUsername(String username) {
+
+	public boolean isUserExist(String username) {
 		String SQL = "select exists(select * from User where username = ?)";
 		int count = (Integer)jdbcTemplateObject.queryForObject(
 				SQL, new Object[] { username }, Integer.class);
 		//User user = jdbcTemplateObject.queryForObject(SQL,
 		//		new Object[] { username }, new UserMapper());
-		return count;
+
+		return count == 0 ? false : true;
 	}
 
+	public User getUserByUsername(String username) {
+		if (isUserExist(username)) {
+			String SQL = "select * from User where username = ?";
+			User user = jdbcTemplateObject.queryForObject(SQL,
+					new Object[] { username }, new UserMapper());
+			return user;
+		}
+		return null;
+	}
 	@Override
 	public void delete(Integer user_id) {
 		String SQL = "delete from User where user_id = ?";
@@ -121,5 +132,6 @@ public class UserJDBCTemplate implements UserDAO{
 		jdbcTemplateObject.update(SQL, password, user_id);
 		return;
 	}
+
 
 }

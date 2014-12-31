@@ -125,6 +125,21 @@ public class RedisUtilsTemplate implements RedisDAO {
 		return res;
 	}
 
+	public List<String> getFollowingItemRanks(int item_id, int user_id){
+		List<String> res = new ArrayList<String>();
+		Set<String> followingSet = getUserFollowing(user_id);
+		Set<String> all = getTitleRanks(item_id);
+		all.retainAll(followingSet);
+		for(String followingId : all ){
+			res.add(getUserRankID(Integer.parseInt(followingId), item_id));
+		}
+
+		return res;
+	}
+	
+	
+	
+	
 	private void addRankToItemTotalHelper(List<String> keys, int rank, boolean isRanked){
 		SessionCallback<List<String>> callback = new SessionCallback<List<String>>() {
 			@Override

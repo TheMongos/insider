@@ -17,4 +17,8 @@
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/request/*</url-pattern>
 	</servlet-mapping>
+
+	<session-config>
+		<session-timeout>260000</session-timeout>
+	</session-config>
 </web-app>
