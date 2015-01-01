@@ -75,9 +75,14 @@ public interface RedisDAO {
 	public List<String> getFollowingItemRanks(int item_id, int user_id);
 	
 	/**
-	 * This is the method to add or new item;
+	 * This is the method to add item name to item_id;
 	 */
 	public void addItemName(int item_id , String item_name);
+	
+	/**
+	 * This is the method to add item category to item_id;
+	 */
+	public void addItemCategory(int item_id , byte category_id);
 	
 	/**
 	 * This is the method to add or new user;
@@ -108,4 +113,14 @@ public interface RedisDAO {
 	 * This is the method to delete a review id;
 	 */
 	public void deleteReviewId(int user_id, int item_id);
+	
+	/**
+	 * This is the method to be used to list down all the best Titles of a category.
+	 */
+	public List<String> getBestTitles(int category_id);
+	
+	/**
+	 * This is the method to be used to list down all the best Titles of a category.
+	 */
+	public List<String> getBestTitlesForUser(int category_id, int user_id);
 }

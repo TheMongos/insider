@@ -33,7 +33,7 @@ public class Utils {
 		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		Long item_id = itemJDBCTemplate.create(category_id, title, year, description, other_data);
 		redisUtilsTemplate.addItemName(item_id.intValue(), title);
-		
+		redisUtilsTemplate.addItemCategory(item_id.intValue(), category_id);
 		return item_id;
 	}
 	
