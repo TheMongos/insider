@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -78,8 +79,13 @@ public class ItemJDBCTemplate implements ItemDAO {
 	// @Override
 	public Item getItem(Integer item_id) {
 		String SQL = "select * from Item where item_id = ?";
-		Item item = jdbcTemplateObject.queryForObject(SQL,
+		Item item = null;
+		try{
+			item = jdbcTemplateObject.queryForObject(SQL,
 				new Object[] { item_id }, new ItemMapper());
+		} catch (Exception e){
+			
+		}
 		return item;
 	}
 

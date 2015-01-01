@@ -52,31 +52,36 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 				+ " values (?, ?, ?)";
 
 		//jdbcTemplateObject.update(SQL, user_id, item_id, review_text);
-		
+
 		KeyHolder holder = new GeneratedKeyHolder();
 
 		jdbcTemplateObject.update(new PreparedStatementCreator() {           
 
-		                @Override
-		                public PreparedStatement createPreparedStatement(Connection connection)
-		                        throws SQLException {
-		                    PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
-		                    ps.setInt(1, user_id);
-		                    ps.setInt(2, item_id);
-		                    ps.setString(3, review_text);
-		                    return ps;
-		                }
-		            }, holder);
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection)
+					throws SQLException {
+				PreparedStatement ps = connection.prepareStatement(SQL, new String[] {"item_id"});
+				ps.setInt(1, user_id);
+				ps.setInt(2, item_id);
+				ps.setString(3, review_text);
+				return ps;
+			}
+		}, holder);
 
 		return (Long)holder.getKey();
-		
+
 	}
 
 	@Override
 	public Review getReview(Integer review_id) {
 		String SQL = "select * from Review where review_id = ?";
-		Review review = jdbcTemplateObject.queryForObject(SQL,
-				new Object[] { review_id }, new ReviewMapper());
+		Review review = null;
+		try {
+			review =jdbcTemplateObject.queryForObject(SQL,
+					new Object[] { review_id }, new ReviewMapper());
+		} catch (Exception e) {
+
+		}
 		return review;
 	}
 

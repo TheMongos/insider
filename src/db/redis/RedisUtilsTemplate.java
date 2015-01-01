@@ -92,7 +92,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		}
 		//Existing rank
 		else { 
-			rank = updateUserRankID(user_id, item_id, rank, review_id) - rank;
+			rank = updateUserRankID(user_id, item_id, rank, review_id);
 			isRanked = true;
 		}
 		addTitleRank(item_id, user_id);

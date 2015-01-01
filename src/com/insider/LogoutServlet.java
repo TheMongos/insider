@@ -19,6 +19,7 @@ public class LogoutServlet {
 			session.invalidate();
 			return "{ status: 'success', message: ' User logout success'}";
 		} else {
+			response.setStatus(401);
 			return "{ status: 'failure', message: 'User was not logged in' }";
 		}
 	}

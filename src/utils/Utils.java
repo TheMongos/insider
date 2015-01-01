@@ -64,6 +64,9 @@ public class Utils {
 	public static User authenticateUser(String username, String password){
 		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
 		User user = userJDBCTemplate.getUserByUsername(username);
+		if(user == null){
+			return null;
+		}
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
 		if (passwordEncoder.matches(password, user.getPassword())){
@@ -80,6 +83,9 @@ public class Utils {
 	
 	public static void addUserFollowing(int user_id, int userFollow_id){
 		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		if(user_id == userFollow_id){
+			return;
+		}
 		rd.addUserFollowing(user_id, userFollow_id);
 		rd.addUserFollowers(userFollow_id, user_id);
 		rd.setUsersRankHistToNewFollower(userFollow_id, user_id);
