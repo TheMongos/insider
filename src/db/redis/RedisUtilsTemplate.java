@@ -206,6 +206,15 @@ public class RedisUtilsTemplate implements RedisDAO {
 		return 0;
 	}
 	
+	@Override
+	public void deleteReviewId(int user_id, int item_id) {
+		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
+		int rank = getUserRank(user_id, item_id);
+		if (rank != 0) {
+			addUserRankID(user_id, item_id, rank, 0);
+		} 
+	}
+	
 	
 	private Set<String> getUserFollowingSet(int user_id) {
 		SetOperations<String, String> setOps = redisTemplate.opsForSet();

@@ -3,7 +3,9 @@ package db.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -100,5 +102,17 @@ public class ItemJDBCTemplate implements ItemDAO {
 		String SQL = "select * from Item";
 		List<Item> items = jdbcTemplateObject.query(SQL, new ItemMapper());
 		return items;
+	}
+
+	@Override
+	public List<String> getTitles(String query) {
+		List<String> res = new ArrayList<String>();
+		String SQL = "select i.item_id, i.title, c.category_name from Item i join Category c on i.category_id = c.category_id where lower(i.title) like lower(?)";
+		List<Map<String, Object>> rows = jdbcTemplateObject.queryForList(SQL, query+ "%");
+		for(@SuppressWarnings("rawtypes") Map row : rows){
+			res.add("{ 'item_id' : " + (Integer)row.get("item_id") + ", 'title' : '" + (String)row.get("title") + "', 'category_name' : '" + (String)row.get("category_name") +"'}");
+		}
+		//List<User> reviews = jdbcTemplateObject.query(SQL,new Object[] { query+"%" } , new UserMapper());
+		return res;
 	}
 }

@@ -39,4 +39,10 @@ public interface ItemDAO {
 	 * Item table
 	 */
 	public List<Item> getItems();
+	
+	/**
+	 * This is the method to be used to return search results from the
+	 * Item table - in json format
+	 */
+	public List<String> getTitles(String query);
 }

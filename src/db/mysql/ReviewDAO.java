@@ -26,7 +26,7 @@ public interface ReviewDAO {
 	 * This is the method to be used to delete a record from the Review table
 	 * corresponding to a passed review_id.
 	 */
-	public void delete(Integer review_id);
+	public boolean delete(Integer review_id, Integer user_id);
 
 	/**
 	 * This is the method to be used to list down all the records from the

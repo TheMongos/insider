@@ -1,5 +1,7 @@
 package db.mysql;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 public interface UserDAO {
@@ -59,4 +61,10 @@ public interface UserDAO {
 	 * This is the method to be used to update a record into the User table.
 	 */
 	public void updatePassword(Integer user_id, String password);
+	
+	/**
+	 * This is the method to be used to list down all the recordes from User table
+	 * where username start with query.
+	 */
+	public List<User> getUsers(String query);
 }

@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeansException;
@@ -8,6 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import db.mysql.CategoryJDBCTemplate;
+import db.mysql.Item;
 import db.mysql.ItemJDBCTemplate;
 import db.mysql.Review;
 import db.mysql.ReviewJDBCTemplate;
@@ -26,22 +28,12 @@ public class Utils {
 		}
 	}
 
-	//TODO
-	public static List<SearchResult> getSearchResults(String query){
-		//TODO
-		return null;
-	}
-	
 	public static Long addItem(byte category_id, String title, String year, String description, String other_data){
 		ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
 		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		Long item_id = itemJDBCTemplate.create(category_id, title, year, description, other_data);
 		redisUtilsTemplate.addItemName(item_id.intValue(), title);
 		
-		
-		//TODO
-		//add item to search list - redis
-	
 		return item_id;
 	}
 	
@@ -151,6 +143,33 @@ public class Utils {
 
 		redisUtilsTemplate.addRankToItem(user_id, item_id, category_id, rank, review_id.intValue());
 		return review_id;
+	}
+	
+	public static boolean deleteReview(int review_id, int user_id, int item_id) {
+		ReviewJDBCTemplate reviewJDBCTemplate = (ReviewJDBCTemplate) context.getBean("reviewJDBCTemplate");
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		if (reviewJDBCTemplate.delete(review_id, user_id) == true) {
+			redisUtilsTemplate.deleteReviewId(user_id, item_id);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static List<String> searchUsers(String query){
+		 List<String> res = new  ArrayList<String>();
+		 UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
+		 List<User> usersList = userJDBCTemplate.getUsers(query);
+		 for(User user: usersList){
+			 res.add("{ 'username': '" + user.getUsername() + "', 'user_id' : '" + user.getUser_id() + "' }");
+		 }
+		 
+		 return res;
+	}
+	
+	public static List<String> searchItems(String query){
+		 ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
+		 return itemJDBCTemplate.getTitles(query);
 	}
 	
 }

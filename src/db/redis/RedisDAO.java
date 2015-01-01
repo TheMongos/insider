@@ -103,4 +103,9 @@ public interface RedisDAO {
 	 * This is the method to get review id;
 	 */
 	public int getReviewId(int user_id, int item_id);
+
+	/**
+	 * This is the method to delete a review id;
+	 */
+	public void deleteReviewId(int user_id, int item_id);
 }

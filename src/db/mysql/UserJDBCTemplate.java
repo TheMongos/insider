@@ -3,6 +3,7 @@ package db.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 import javax.swing.text.StyledEditorKit.BoldAction;
@@ -133,5 +134,11 @@ public class UserJDBCTemplate implements UserDAO{
 		return;
 	}
 
+	@Override
+	public List<User> getUsers(String query) {
+		String SQL = "select * from User where lower(username) like lower(?)";
+		List<User> reviews = jdbcTemplateObject.query(SQL,new Object[] { query+"%" } , new UserMapper());
+		return reviews;
+	}
 
 }

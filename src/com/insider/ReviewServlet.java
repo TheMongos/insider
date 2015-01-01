@@ -49,7 +49,6 @@ public class ReviewServlet {
 			@FormParam("review_text") String review_text,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
-		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
@@ -62,16 +61,22 @@ public class ReviewServlet {
 		}
 	}
 	
-	@DELETE @Path("/{review_id}")
+	@DELETE @Path("/{review_id}/{item_id}")
 	@Produces("application/json")
 	public String deleteReview(@PathParam("review_id") int review_id,
+			@PathParam("item_id") int item_id,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
 		HttpSession session = request.getSession(false);
 		Gson gson = new Gson();
 		if(session != null){
-			Review res = Utils.getReview(review_id);
-			return gson.toJson(res);
+			boolean res = Utils.deleteReview(review_id, (int)session.getAttribute("user_id"), item_id);
+			if (res == true) {
+				return "{ status: 'success', message: 'Review was deleted successfully!' }";
+			} else {
+				response.setStatus(403);
+				return "{ status: 'failure', message: 'You can't delete this review id.' }";
+			}
 		} else {
 			response.setStatus(401);
 			return "{ status: 'failure', message: 'user not logged in.' }";

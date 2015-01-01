@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -80,11 +81,10 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 	}
 
 	@Override
-	public void delete(Integer review_id) {
-		String SQL = "delete from Review where review_id = ?";
-		jdbcTemplateObject.update(SQL, review_id);
-		return;
-		
+	public boolean delete(Integer review_id, Integer user_id) {
+		String SQL = "delete from Review where review_id = ? and user_id = ?";
+		int res = jdbcTemplateObject.update(SQL, review_id, user_id);
+		return (res == 0) ? false : true;
 	}
 
 	@Override

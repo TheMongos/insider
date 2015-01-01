@@ -1,7 +1,5 @@
 package com.insider;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,10 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import utils.Utils;
-import db.mysql.User;
 
 @Path("/category")
 public class CategoryServlet {
