@@ -21,7 +21,7 @@ public class LoginServlet {
 	@POST 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces("application/json")
-	public String signup(@FormParam("username") String username,
+	public String login(@FormParam("username") String username,
 			@FormParam("password") String password,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {

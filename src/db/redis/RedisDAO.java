@@ -95,7 +95,12 @@ public interface RedisDAO {
 	public UserDetails getUserDetails(int user_id, int my_user_id);
 	
 	/**
-	 * This is the method to set user's rank history to new follower
+	 * This is the method to set user's rank history to new follower;
 	 */
 	public void setUsersRankHistToNewFollower(int userFollower_id, int user_id);
+	
+	/**
+	 * This is the method to get review id;
+	 */
+	public int getReviewId(int user_id, int item_id);
 }

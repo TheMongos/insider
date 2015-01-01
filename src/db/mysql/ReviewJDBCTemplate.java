@@ -101,4 +101,10 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 		return reviews;
 	}
 
+	@Override
+	public void update(int review_id, String review_text) {
+		String SQL = "update Review set review_text = ? where review_id = ?";
+		jdbcTemplateObject.update(SQL, review_text, review_id);
+	}
+
 }

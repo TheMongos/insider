@@ -23,7 +23,7 @@ public class UserServlet {
 
 	@POST @Path("/follow/{userFollowingId}")
 	@Produces("application/json")
-	public String getItem(@PathParam("userFollowingId") int userFollowingId,
+	public String followUser(@PathParam("userFollowingId") int userFollowingId,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
 		HttpSession session = request.getSession(false);

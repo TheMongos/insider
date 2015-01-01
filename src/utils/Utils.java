@@ -1,7 +1,6 @@
 package utils;
 
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -10,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import db.mysql.CategoryJDBCTemplate;
 import db.mysql.ItemJDBCTemplate;
+import db.mysql.Review;
+import db.mysql.ReviewJDBCTemplate;
 import db.mysql.User;
 import db.mysql.UserJDBCTemplate;
 import db.redis.RedisUtilsTemplate;
@@ -128,6 +129,28 @@ public class Utils {
 		res.setUserDetails(redisUtilsTemplate.getUserDetails(user_id, my_user_id));
 		System.out.println(res.getUserDetails().getIsFollowing());
 		return res;
+	}
+	
+	public static Review getReview(int review_id) {
+		ReviewJDBCTemplate reviewJDBCTemplate = (ReviewJDBCTemplate) context.getBean("reviewJDBCTemplate");
+		return reviewJDBCTemplate.getReview(review_id);
+	}
+	
+	public static Long addReview(int user_id, int category_id, int item_id, int rank, String review_text) {
+		ReviewJDBCTemplate reviewJDBCTemplate = (ReviewJDBCTemplate) context.getBean("reviewJDBCTemplate");
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		int oldReviewId = redisUtilsTemplate.getReviewId(user_id, item_id);
+		Long review_id;
+		
+		if (oldReviewId == 0) {
+			review_id = reviewJDBCTemplate.create(user_id, item_id, review_text);
+		} else {
+			reviewJDBCTemplate.update(oldReviewId, review_text);
+			review_id = (long)oldReviewId;
+		}
+
+		redisUtilsTemplate.addRankToItem(user_id, item_id, category_id, rank, review_id.intValue());
+		return review_id;
 	}
 	
 }

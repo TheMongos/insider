@@ -20,7 +20,7 @@ import db.mysql.User;
 public class LogoutServlet {
 	@POST
 	@Produces("application/json")
-	public String signup(@Context HttpServletRequest request,
+	public String logout(@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {
 		HttpSession session = request.getSession(false);
 		if(session != null){

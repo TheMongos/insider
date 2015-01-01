@@ -1,6 +1,7 @@
 package db.mysql;
 
 import java.util.List;
+
 import javax.sql.DataSource;
 
 public interface ReviewDAO {
@@ -40,4 +41,10 @@ public interface ReviewDAO {
 	 * corresponding to a passed user_id.
 	 */
 	public List<Review> getUserReviews(Integer user_id);
+
+	/**
+	 * This is the method to be used to update the review text
+	 * corresponding to a passed review_id.
+	 */
+	public void update(int review_id, String review_text);
 }

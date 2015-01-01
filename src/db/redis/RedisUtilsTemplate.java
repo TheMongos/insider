@@ -193,8 +193,18 @@ public class RedisUtilsTemplate implements RedisDAO {
 			addRankToItemTotalHelper(keysForFollowing, item_rank, false);
 		}
 	}
-
 	
+	@Override
+	public int getReviewId(int user_id, int item_id) {
+		String userRank = getUserRankID(user_id, item_id);
+		if (userRank != null) {
+			JSONObject jsonObj = new JSONObject(userRank);
+			if (jsonObj.has("review_id"))
+				return jsonObj.getInt("review_id");
+		}
+
+		return 0;
+	}
 	
 	
 	private Set<String> getUserFollowingSet(int user_id) {
@@ -349,5 +359,4 @@ public class RedisUtilsTemplate implements RedisDAO {
 
 		return 0;
 	}
-
 }

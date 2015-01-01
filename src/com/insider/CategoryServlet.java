@@ -23,7 +23,7 @@ public class CategoryServlet {
 	@POST 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces("application/json")
-	public String signup(@FormParam("category_id") byte category_id,
+	public String addCategory(@FormParam("category_id") byte category_id,
 			@FormParam("category_name") String category_name,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {
