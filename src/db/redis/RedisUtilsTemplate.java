@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.Box.Filler;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.dao.DataAccessException;
@@ -46,11 +48,6 @@ public class RedisUtilsTemplate implements RedisDAO {
 		return valOps.get(user_id + ":userRankID:" + item_id);
 	}
 
-	private String getUserRankID(int user_id, String item_id){
-		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
-		return valOps.get(user_id + ":userRankID:" + item_id);
-	}
-
 	@Override
 	public Set<String> getTitleRanks(int item_id){
 		ZSetOperations<String, String> zsetOps = redisTemplate.opsForZSet();
@@ -64,9 +61,14 @@ public class RedisUtilsTemplate implements RedisDAO {
 	}
 
 	@Override
-	public Set<String> getUserFollowing(int user_id) {
-		SetOperations<String, String> setOps = redisTemplate.opsForSet();
-		return setOps.members(user_id + ":userFollowing");
+	public List<String> getUserFollowing(int user_id){
+		List<String> res = new ArrayList<String>();
+		Set<String> followingSet = getUserFollowingSet(user_id);
+		for(String following_id: followingSet){
+			res.add("{'user_id': " + following_id + ", 'username': '" + getUsername(Integer.parseInt(following_id)) + "' }");
+		}
+		
+		return res;
 	}
 
 	@Override
@@ -77,7 +79,8 @@ public class RedisUtilsTemplate implements RedisDAO {
 	@Override
 	public void addRankToItem(int user_id, int item_id, int category_id, int rank, int review_id) {
 		List<String> keysForTotals = constructKeysForTotals(item_id);
-		List<String> keysForFollowing = constructKeysForFollowing(user_id, item_id);
+		List<String> userFollowers = getUserFollowers(user_id);
+		List<String> keysForFollowing;
 		boolean isRanked;
 
 		//New rank
@@ -93,7 +96,10 @@ public class RedisUtilsTemplate implements RedisDAO {
 		}
 		addTitleRank(item_id, user_id);
 		addRankToItemTotalHelper(keysForTotals, rank, isRanked);
-		addRankToItemTotalHelper(keysForFollowing, rank, isRanked);
+		for (String follower : userFollowers) {
+			keysForFollowing = constructKeysForFollowing(follower, item_id);
+			addRankToItemTotalHelper(keysForFollowing, rank, isRanked);
+		}
 	}
 
 	@Override
@@ -104,8 +110,12 @@ public class RedisUtilsTemplate implements RedisDAO {
 
 	@Override
 	public List<String> getUserFollowers(int user_id){
+		List<String> res = new ArrayList<String>();
 		ListOperations<String, String> listOps = redisTemplate.opsForList();
-		List<String> res = listOps.range(user_id + ":userFollowers", 0, -1);
+		List<String> followersList = listOps.range(user_id + ":userFollowers", 0, -1);
+		for(String follower_id: followersList){
+			res.add("{'user_id': " + follower_id + ", 'username': '" + getUsername(Integer.parseInt(follower_id)) + "' }");
+		}
 		return res;
 	}
 
@@ -116,18 +126,19 @@ public class RedisUtilsTemplate implements RedisDAO {
 		String followingCount = getFollowingItemCount(user_id, item_id);
 		String totalAvg = getItemAvg(item_id);
 		String followingAvg =getFollowingItemAvg(user_id, item_id);
-		res.setFollowingAvg(followingAvg == null ? 0 : Integer.parseInt(followingAvg));
+		res.setFollowingAvg(followingAvg == null ? 0 : Float.parseFloat(followingAvg));
 		res.setFollowingCount(followingCount == null ? 0 : Integer.parseInt(followingCount));
-		res.setTotalAvg(totalAvg == null ? 0 : Integer.parseInt(totalAvg));
+		res.setTotalAvg(totalAvg == null ? 0 : Float.parseFloat(totalAvg));
 		res.setTotalCount(totalCount == null ? 0 : Integer.parseInt(totalCount));
-		res.setUserRank(getUserRank(user_id, item_id));
-		
+		res.setUserRank(getUserRankID(user_id, item_id));
+
 		return res;
 	}
 
+	@Override
 	public List<String> getFollowingItemRanks(int item_id, int user_id){
 		List<String> res = new ArrayList<String>();
-		Set<String> followingSet = getUserFollowing(user_id);
+		Set<String> followingSet = getUserFollowingSet(user_id);
 		Set<String> all = getTitleRanks(item_id);
 		all.retainAll(followingSet);
 		for(String followingId : all ){
@@ -137,9 +148,74 @@ public class RedisUtilsTemplate implements RedisDAO {
 		return res;
 	}
 	
+	@Override
+	public void addItemName(int item_id , String item_name){
+		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
+		valOps.set(item_id + ":itemName", item_name);
+	}
+
+	@Override
+	public void addUsername(int user_id , String username){
+		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
+		valOps.set(user_id + ":username", username);
+	}
+	
+	@Override
+	public String getUsername(int user_id){
+		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
+		return valOps.get(user_id + ":username");
+	}
+	
+	@Override
+	public UserDetails getUserDetails(int user_id, int my_user_id){
+		UserDetails res = new UserDetails();
+		ListOperations<String, String> listOps = redisTemplate.opsForList();
+		Long userFollowersCount = listOps.size(user_id + ":userFollowers");
+		SetOperations<String, String> setOps = redisTemplate.opsForSet();
+		Long userFollowingCount =  setOps.size(user_id + ":userFollowing");
+		
+		res.setIsFollowing(isUserFollowing(my_user_id, user_id));
+		res.setUserFollowersCount(userFollowersCount == null ? 0 : userFollowersCount.intValue());
+		res.setUserFollowingCount(userFollowingCount == null ? 0 : userFollowingCount.intValue());
+		
+		return res;
+ 	}
+	
+	@Override
+	public void setUsersRankHistToNewFollower(int userFollower_id, int user_id){
+		List<String> userRanks = getUserRanks(user_id);
+		List<String> keysForFollowing;
+		for(String rank : userRanks){
+			JSONObject jsonObj = new JSONObject(rank);
+			int item_rank = jsonObj.getInt("rank");
+			int item_id = jsonObj.getInt("item_id");
+			keysForFollowing = constructKeysForFollowing(userFollower_id, item_id);
+			addRankToItemTotalHelper(keysForFollowing, item_rank, false);
+		}
+	}
+
 	
 	
 	
+	private Set<String> getUserFollowingSet(int user_id) {
+		SetOperations<String, String> setOps = redisTemplate.opsForSet();
+		return setOps.members(user_id + ":userFollowing");
+	}
+	
+	private Boolean isUserFollowing(int my_user_id, int user_id) {
+		if ( my_user_id == user_id){
+			return null;
+		} else {
+			SetOperations<String, String> setOps = redisTemplate.opsForSet();
+			return setOps.isMember(my_user_id + ":userFollowing", String.valueOf(user_id));
+		}
+	}
+
+	private String getUserRankID(int user_id, String item_id){
+		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
+		return valOps.get(user_id + ":userRankID:" + item_id);
+	}
+
 	private void addRankToItemTotalHelper(List<String> keys, int rank, boolean isRanked){
 		SessionCallback<List<String>> callback = new SessionCallback<List<String>>() {
 			@Override
@@ -185,7 +261,16 @@ public class RedisUtilsTemplate implements RedisDAO {
 		keys.add(user_id + ":userFollowingItemAvgRank:" + item_id);
 		return keys;
 	}
+	
+	private List<String> constructKeysForFollowing(String user_id, int item_id) {
+		List<String> keys = new ArrayList<String>();
+		keys.add(user_id + ":userFollowingItemTotalRank:" + item_id);
+		keys.add(user_id + ":userFollowingItemCountRank:" + item_id);
+		keys.add(user_id + ":userFollowingItemAvgRank:" + item_id);
+		return keys;
+	}
 
+	
 	private int updateUserRankID(int user_id, int item_id, int rank, int review_id) {
 		JSONObject jsonObj = new JSONObject(getUserRankID(user_id, item_id));
 		int oldRank = jsonObj.getInt("rank");
@@ -212,12 +297,13 @@ public class RedisUtilsTemplate implements RedisDAO {
 	private void addUserRankID(int user_id, int item_id, int rank, int review_id){
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		String val;
-		String item_name = valOps.get(item_id + ":item_name");
+		String item_name = valOps.get(item_id + ":itemName");
+		String username = valOps.get(user_id + ":username");
 
 		if(review_id != 0){
-			val = "{'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "','review_id':" + review_id + "}";
+			val = "{ 'username':'" + username + "', 'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "','review_id':" + review_id + "}";
 		} else {
-			val = "{'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "}";
+			val = "{ 'username':'" + username + "', 'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "'}";
 		}
 
 		valOps.set(user_id + ":userRankID:" + item_id, val);
@@ -233,17 +319,17 @@ public class RedisUtilsTemplate implements RedisDAO {
 		List<String> res = listOps.range(user_id + ":userRanks", 0, -1);
 		return res;
 	}
-	
+
 	private String getItemAvg(int item_id) {
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		return valOps.get(item_id + ":itemAvgRank");
 	}
-	
+
 	private String getFollowingItemAvg(int user_id, int item_id) {
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		return valOps.get(user_id + ":userFollowingItemAvgRank:" + item_id);
 	}
-	
+
 	private String getItemCount(int item_id) {
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		return valOps.get(item_id + ":itemCountRank");
@@ -253,15 +339,15 @@ public class RedisUtilsTemplate implements RedisDAO {
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		return valOps.get(user_id + ":userFollowingItemCountRank:" + item_id);
 	}	
-	
+
 	private int getUserRank(int user_id, int item_id) {
 		String userRank = getUserRankID(user_id, item_id);
 		if (userRank != null) {
 			JSONObject jsonObj = new JSONObject(userRank);
 			return jsonObj.getInt("rank");
 		}
-		
+
 		return 0;
 	}
- 
+
 }

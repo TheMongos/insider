@@ -39,9 +39,9 @@ public interface RedisDAO {
 	public void addUserFollowing(int user_id, int userFollow_id);
 	
 	/**
-	 * This is the method to be used to get the user following set.
+	 * This is the method to be used to get the user following list.
 	 */
-	public Set<String> getUserFollowing(int user_id);
+	public List<String> getUserFollowing(int user_id);
 	
 	/**
 	 * This is the method to be used to add user followers list - a new follower (userFollow_id).
@@ -73,4 +73,29 @@ public interface RedisDAO {
 	 * This is the method to be used to list down all the ranks of the user following for item.
 	 */
 	public List<String> getFollowingItemRanks(int item_id, int user_id);
+	
+	/**
+	 * This is the method to add or new item;
+	 */
+	public void addItemName(int item_id , String item_name);
+	
+	/**
+	 * This is the method to add or new user;
+	 */
+	public void addUsername(int user_id , String username);
+	
+	/**
+	 * This is the method to add or new user;
+	 */
+	public String getUsername(int user_id);
+	
+	/**
+	 * This is the method to get user followin/followers details;
+	 */
+	public UserDetails getUserDetails(int user_id, int my_user_id);
+	
+	/**
+	 * This is the method to set user's rank history to new follower
+	 */
+	public void setUsersRankHistToNewFollower(int userFollower_id, int user_id);
 }

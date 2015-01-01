@@ -18,7 +18,7 @@ import db.mysql.User;
 
 @Path("/login")
 public class LoginServlet {
-	@POST
+	@POST 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces("application/json")
 	public String signup(@FormParam("username") String username,
@@ -32,7 +32,7 @@ public class LoginServlet {
 			session.setAttribute("user_id", user.getUser_id());
 			session.setAttribute("first_name", user.getFirst_name());
 			session.setAttribute("last_name", user.getLast_name());
-			session.setMaxInactiveInterval(session.getMaxInactiveInterval());
+			session.setMaxInactiveInterval(260000);//session.getMaxInactiveInterval());
 			return "{ status: 'success', message: 'User login! id: " + user.getUser_id() + "', id: " + user.getUser_id()  + "}";
 		} else {
 			response.setStatus(401);

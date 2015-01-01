@@ -3,9 +3,9 @@ package db.redis;
 public class ItemRanks {
 	private int totalCount;
 	private int followingCount;
-	private int totalAvg;
-	private int followingAvg;
-	private int userRank;
+	private float totalAvg;
+	private float followingAvg;
+	private String userRank;
 	
 	public int getTotalCount() {
 		return totalCount;
@@ -19,22 +19,22 @@ public class ItemRanks {
 	public void setFollowingCount(int followingCount) {
 		this.followingCount = followingCount;
 	}
-	public int getTotalAvg() {
+	public float getTotalAvg() {
 		return totalAvg;
 	}
-	public void setTotalAvg(int totalAvg) {
+	public void setTotalAvg(float totalAvg) {
 		this.totalAvg = totalAvg;
 	}
-	public int getFollowingAvg() {
+	public float getFollowingAvg() {
 		return followingAvg;
 	}
-	public void setFollowingAvg(int followingAvg) {
+	public void setFollowingAvg(float followingAvg) {
 		this.followingAvg = followingAvg;
 	}
-	public int getUserRank() {
+	public String getUserRank() {
 		return userRank;
 	}
-	public void setUserRank(int userRank) {
+	public void setUserRank(String userRank) {
 		this.userRank = userRank;
 	}
 	

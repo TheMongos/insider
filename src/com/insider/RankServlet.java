@@ -24,12 +24,12 @@ public class RankServlet {
 	public String getItem(@PathParam("item_id") int item_id,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
-		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
 			List<String> res = Utils.getFollowingItemRanks(item_id, user_id);
-			return gson.toJson(res);
+			//already in json format!
+			return res.toString();
 		} else {
 			response.setStatus(401);
 			return "{ status: 'failure', message: 'user not logged in.' }";
@@ -41,18 +41,36 @@ public class RankServlet {
 	@Produces("application/json") 
 	public String postRank(@PathParam("category_id") int category_id,
 			@PathParam("item_id") int item_id,
-			@PathParam("rank") byte rank,
+			@PathParam("rank") int rank,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
 		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
-			List<String> res = Utils.getFollowingItemRanks(item_id, user_id);
-			return gson.toJson(res);
+			Utils.addRankToItem(user_id, item_id, category_id, rank);
+			return "{ status: 'success', message: 'Rank added' }";
 		} else {
 			response.setStatus(401);
 			return "{ status: 'failure', message: 'user not logged in.' }";
 		}
 	}
+	
+	@GET @Path("/{user_id}")
+	@Produces("application/json")
+	public String getUserRanks(@PathParam("user_id") int user_id,
+			@Context HttpServletRequest request,
+			@Context HttpServletResponse response){
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			//int user_id = (Integer)session.getAttribute("user_id");
+			List<String> res = Utils.getUserRanks(user_id);
+			//already in json format!
+			return res.toString();
+		} else {
+			response.setStatus(401);
+			return "{ status: 'failure', message: 'user not logged in.' }";
+		}
+	}
+	
 }

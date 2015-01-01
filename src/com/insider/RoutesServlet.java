@@ -1,5 +1,6 @@
 package com.insider;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -162,7 +163,6 @@ public class RoutesServlet {
 ////		}
 //
 //		//		reviewJDBCTemplate.delete(2);
-//
 //
 		return "hello insider";
 //		return gson.toJson(res);

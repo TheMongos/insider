@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -23,10 +24,6 @@ public class Utils {
 			System.err.println("Severe Error: Can't load Beans.xml - fuck the system!");
 		}
 	}
-	
-	public static void addRank(int user_id, int rank, int item_id ){
-		
-	}
 
 	//TODO
 	public static List<SearchResult> getSearchResults(String query){
@@ -36,7 +33,10 @@ public class Utils {
 	
 	public static Long addItem(byte category_id, String title, String year, String description, String other_data){
 		ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		Long item_id = itemJDBCTemplate.create(category_id, title, year, description, other_data);
+		redisUtilsTemplate.addItemName(item_id.intValue(), title);
+		
 		
 		//TODO
 		//add item to search list - redis
@@ -63,7 +63,10 @@ public class Utils {
 	
 	public static long addNewUser(String firstName, String lastName, String username, String email, String password) {
 		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
-		return userJDBCTemplate.create(firstName, lastName, username, email, password);
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		Long user_id = userJDBCTemplate.create(firstName, lastName, username, email, password);
+		rd.addUsername(user_id.intValue(), username);
+		return user_id;
 	}
 	
 	public static User authenticateUser(String username, String password){
@@ -87,10 +90,44 @@ public class Utils {
 		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		rd.addUserFollowing(user_id, userFollow_id);
 		rd.addUserFollowers(userFollow_id, user_id);
+		rd.setUsersRankHistToNewFollower(userFollow_id, user_id);
 	}
 
 	public static void addCategory(byte category_id, String category_name) {
 		CategoryJDBCTemplate categoryJDBCTemplate = (CategoryJDBCTemplate) context.getBean("categoryJDBCTemplate");
 		categoryJDBCTemplate.create(category_id, category_name);
 	}
+	
+	public static void addRankToItem(int user_id, int item_id, int category_id, int rank){
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		rd.addRankToItem(user_id, item_id, category_id, rank);
+	}
+	
+	public static List<String> getUserFollowing(int user_id){
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		return rd.getUserFollowing(user_id);
+	}
+	
+	public static List<String> getUserFollowers(int user_id){
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		return rd.getUserFollowers(user_id);
+	}
+	
+	public static List<String> getUserRanks(int user_id){
+		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		return rd.getUserRanks(user_id);
+	}
+	
+	
+	public static UserRes getUser(int my_user_id, int user_id){
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
+		
+		UserRes res = new UserRes();
+		res.setUser(userJDBCTemplate.getUser(user_id));
+		res.setUserDetails(redisUtilsTemplate.getUserDetails(user_id, my_user_id));
+		System.out.println(res.getUserDetails().getIsFollowing());
+		return res;
+	}
+	
 }
