@@ -38,7 +38,7 @@ public class ItemServlet {
 		}
 	}
 
-	@POST //@Path("/{category_id}/{title}/{year}/{description}/{other_data}")
+	@POST 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces("text/plain")
 	public String postItem(@FormParam("category_id") byte category_id,
@@ -47,7 +47,6 @@ public class ItemServlet {
 			@FormParam("description") String description,
 			@FormParam("other_data") String other_data){
 		System.out.println("im here");
-		Gson gson = new Gson();
 		Long res = Utils.addItem(category_id, title, year, description, other_data);
 		return res.toString();
 	}

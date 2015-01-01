@@ -9,7 +9,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import db.mysql.CategoryJDBCTemplate;
-import db.mysql.Item;
 import db.mysql.ItemJDBCTemplate;
 import db.mysql.Review;
 import db.mysql.ReviewJDBCTemplate;

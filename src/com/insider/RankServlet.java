@@ -14,8 +14,6 @@ import javax.ws.rs.core.Context;
 
 import utils.Utils;
 
-import com.google.gson.Gson;
-
 @Path("/rank")
 public class RankServlet {
 
@@ -44,7 +42,6 @@ public class RankServlet {
 			@PathParam("rank") int rank,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
-		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
@@ -63,7 +60,6 @@ public class RankServlet {
 			@Context HttpServletResponse response){
 		HttpSession session = request.getSession(false);
 		if(session != null){
-			//int user_id = (Integer)session.getAttribute("user_id");
 			List<String> res = Utils.getUserRanks(user_id);
 			//already in json format!
 			return res.toString();

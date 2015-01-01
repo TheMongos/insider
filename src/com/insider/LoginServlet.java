@@ -11,8 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import utils.Utils;
 import db.mysql.User;
 
@@ -32,7 +30,7 @@ public class LoginServlet {
 			session.setAttribute("user_id", user.getUser_id());
 			session.setAttribute("first_name", user.getFirst_name());
 			session.setAttribute("last_name", user.getLast_name());
-			session.setMaxInactiveInterval(260000);//session.getMaxInactiveInterval());
+			session.setMaxInactiveInterval(260000);
 			return "{ status: 'success', message: 'User login! id: " + user.getUser_id() + "', id: " + user.getUser_id()  + "}";
 		} else {
 			response.setStatus(401);

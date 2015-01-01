@@ -68,7 +68,6 @@ public class ReviewServlet {
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
 		HttpSession session = request.getSession(false);
-		Gson gson = new Gson();
 		if(session != null){
 			boolean res = Utils.deleteReview(review_id, (int)session.getAttribute("user_id"), item_id);
 			if (res == true) {
