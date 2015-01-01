@@ -172,4 +172,14 @@ public class Utils {
 		 return itemJDBCTemplate.getTitles(query);
 	}
 	
+	public static List<String> getBestTitles(int category_id){
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		 return redisUtilsTemplate.getBestTitles(category_id);
+	}
+	
+	public static List<String> getBestTitlesForUser(int category_id, int user_id){
+		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
+		 return redisUtilsTemplate.getBestTitlesForUser(category_id, user_id);
+	}
+	
 }

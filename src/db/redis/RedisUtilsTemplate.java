@@ -235,7 +235,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
 		
 		ZSetOperations<String, String> zsetOps =  redisTemplate.opsForZSet();
-		Set<TypedTuple<String>> set= zsetOps.reverseRangeWithScores(category_id + ":bestTitles", 0, 25);
+		Set<TypedTuple<String>> set= zsetOps.reverseRangeWithScores(user_id + ":" + category_id +  ":userFollowingBestTitles", 0, 25);
 		for(TypedTuple<String> tt : set){
 			System.out.println(tt.getScore() + " " + tt.getValue());
 			String item_name = valOps.get(tt.getValue() + ":itemName");
