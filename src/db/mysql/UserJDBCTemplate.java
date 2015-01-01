@@ -29,12 +29,13 @@ public class UserJDBCTemplate implements UserDAO{
 				+ " (user_id INT NOT NULL AUTO_INCREMENT"
 				+ ", first_name CHAR(35) NOT NULL "
 				+ ", last_name CHAR(35) NOT NULL "
-				+ ", username CHAR(30) NOT NULL"
+				+ ", username CHAR(30) NOT NULL "
 				+ ", email CHAR(255) NOT NULL"
 				+ ", password CHAR(60) NOT NULL"
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
 				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 				+ ", primary key (user_id)"
+				+ ", UNIQUE(username)"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";
 
 		System.out.println(SQL);
