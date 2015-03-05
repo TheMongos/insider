@@ -1,9 +1,11 @@
 package utils;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,9 +22,16 @@ public class Utils {
 	
 	private static ApplicationContext context;
 	static {
+		Connection connection = null;
+		Statement statement = null;
 		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "");
+			statement = connection.createStatement();
+			String sql = "create database if not exists insider";
+			statement.executeUpdate(sql);
 			context = new ClassPathXmlApplicationContext("Beans.xml");
-		} catch (BeansException e) {
+		} catch (Exception e) {
 			System.err.println("Severe Error: Can't load Beans.xml - fuck the system!");
 		}
 	}
