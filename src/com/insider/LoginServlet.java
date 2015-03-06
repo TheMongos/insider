@@ -23,7 +23,8 @@ import db.mysql.User;
 
 @Path("/login")
 public class LoginServlet {
-	@POST 
+	//before using angular - diffrent @Consumes
+	/*@POST 
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces("application/json")
 	public String login(@FormParam("username") String username,
@@ -43,7 +44,7 @@ public class LoginServlet {
 			response.setStatus(401);
 			return "{ status: 'failure', message: 'username: " + username + " doesn't exist or password incorrect.' }";
 		}
-	}
+	}*/
 	
 	@POST 
 	@Consumes("application/json")
@@ -64,7 +65,7 @@ public class LoginServlet {
 			return "{ \"status\": \"success\", \"message\": \"User login! id: " + user.getUser_id() + "\", \"id\": " + user.getUser_id()  + "}";
 		} else {
 			response.setStatus(401);
-			return "{ \"status\": \"failure\", \"message\": \"username: " + username + " doesn't exist or password incorrect.\" }";
+			return "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }";
 		}
 
 	}

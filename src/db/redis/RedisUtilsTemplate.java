@@ -175,12 +175,20 @@ public class RedisUtilsTemplate implements RedisDAO {
 	@Override
 	public UserDetails getUserDetails(int user_id, int my_user_id){
 		UserDetails res = new UserDetails();
+		Boolean isMyAccount;
 		ListOperations<String, String> listOps = redisTemplate.opsForList();
 		Long userFollowersCount = listOps.size(user_id + ":userFollowers");
 		SetOperations<String, String> setOps = redisTemplate.opsForSet();
 		Long userFollowingCount =  setOps.size(user_id + ":userFollowing");
+		isMyAccount=isUserFollowing(my_user_id, user_id);
+		if(isMyAccount != null){
+			res.setIsFollowing(isMyAccount);
+			res.setMyAccount(false);
+		} else {
+			res.setIsFollowing(false);
+			res.setMyAccount(true);
+		}
 		
-		res.setIsFollowing(isUserFollowing(my_user_id, user_id));
 		res.setUserFollowersCount(userFollowersCount == null ? 0 : userFollowersCount.intValue());
 		res.setUserFollowingCount(userFollowingCount == null ? 0 : userFollowingCount.intValue());
 		

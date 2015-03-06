@@ -71,15 +71,32 @@ public class UserServlet {
 	public String getUser(@PathParam("user_id") int user_id,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
+		System.out.println("/user/:userid");
 		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			int my_user_id = (Integer)session.getAttribute("user_id");
 			 UserRes res = Utils.getUser(my_user_id, user_id);
-			return  gson.toJson(res);
+			return  "{ \"status\": \"success\", \"user\": " + gson.toJson(res) + "}";
 		} else {
 			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
+		}
+	}
+	
+	@GET 
+	@Produces("application/json")
+	public String getUser(@Context HttpServletRequest request,
+			@Context HttpServletResponse response){
+		Gson gson = new Gson();
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			int my_user_id = (Integer)session.getAttribute("user_id");
+			 UserRes res = Utils.getUser(my_user_id, my_user_id);
+			return  "{ \"status\": \"success\", \"user\": " + gson.toJson(res) + "}";
+		} else {
+			response.setStatus(401);
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 }

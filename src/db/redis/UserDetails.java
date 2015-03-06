@@ -4,7 +4,14 @@ public class UserDetails {
 	int userFollowingCount;
 	int userFollowersCount;
 	Boolean isFollowing;
+	Boolean isMyAccount;
 	
+	public Boolean getMyAccount() {
+		return isMyAccount;
+	}
+	public void setMyAccount(Boolean myAccount) {
+		this.isMyAccount = myAccount;
+	}
 	public Boolean getIsFollowing() {
 		return isFollowing;
 	}

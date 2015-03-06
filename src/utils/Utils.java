@@ -133,7 +133,6 @@ public class Utils {
 		UserRes res = new UserRes();
 		res.setUser(userJDBCTemplate.getUser(user_id));
 		res.setUserDetails(redisUtilsTemplate.getUserDetails(user_id, my_user_id));
-		System.out.println(res.getUserDetails().getIsFollowing());
 		return res;
 	}
 	
