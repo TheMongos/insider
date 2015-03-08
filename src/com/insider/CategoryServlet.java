@@ -25,7 +25,7 @@ public class CategoryServlet {
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			Utils.addCategory(category_id, category_name);
-			return "{ status: 'success', message: 'Category added' }";
+			return "{ \"status\": \"success\", \"message\": \"Category added\" }";
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";

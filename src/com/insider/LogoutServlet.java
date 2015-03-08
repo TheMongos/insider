@@ -19,7 +19,7 @@ public class LogoutServlet {
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			session.invalidate();
-			return "{ status: 'success', message: ' User logout success'}";
+			return "{ \"status\": \"success\", \"message\": \"User logout success\"}";
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";

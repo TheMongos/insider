@@ -34,7 +34,7 @@ public class SignupServlet {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashedPassword = passwordEncoder.encode(password);
 			long key = Utils.addNewUser(firstName, lastName, username, email, hashedPassword);
-			return "{ status: 'success', message: 'User created successfully! id: " + key + "', id: " + key  + "}";
+			return "{ \"status\": \"success\", \"message\": \"User created successfully! id: " + key + "\", \"id\": " + key  + "}";
 		}
 	}
 }

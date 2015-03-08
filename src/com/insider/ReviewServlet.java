@@ -54,7 +54,7 @@ public class ReviewServlet {
 			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
 			int user_id = (Integer)session.getAttribute("user_id");
 			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
-			return "{ status: 'success', message: 'Review was created successfully! review id: " + res.toString() + "' }";
+			return "{ \"status\": \"success\", \"message\": \"Review was created successfully! review id: " + res.toString() + "\" }";
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
@@ -71,7 +71,7 @@ public class ReviewServlet {
 		if(session != null){
 			boolean res = Utils.deleteReview(review_id, (int)session.getAttribute("user_id"), item_id);
 			if (res == true) {
-				return "{ status: 'success', message: 'Review was deleted successfully!' }";
+				return "{ \"status\": \"success\", \"message\": \"Review was deleted successfully!\" }";
 			} else {
 				Utils.sendError(response ,403, "{ \"status\": \"failure\", \"message\": \"You can't delete this review id.\" }");
 				return "{ \"status\": \"failure\", \"message\": \"You can't delete this review id.\" }";
