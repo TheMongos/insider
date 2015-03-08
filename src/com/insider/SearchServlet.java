@@ -26,8 +26,8 @@ public class SearchServlet {
 			List<String> res = Utils.searchUsers(query);
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	
@@ -42,8 +42,8 @@ public class SearchServlet {
 			List<String> res = Utils.searchItems(query);
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 }

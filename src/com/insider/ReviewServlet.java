@@ -34,8 +34,8 @@ public class ReviewServlet {
 			Review res = Utils.getReview(review_id);
 			return gson.toJson(res);
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 
@@ -56,8 +56,8 @@ public class ReviewServlet {
 			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
 			return "{ status: 'success', message: 'Review was created successfully! review id: " + res.toString() + "' }";
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	
@@ -73,12 +73,12 @@ public class ReviewServlet {
 			if (res == true) {
 				return "{ status: 'success', message: 'Review was deleted successfully!' }";
 			} else {
-				response.setStatus(403);
-				return "{ status: 'failure', message: 'You can't delete this review id.' }";
+				Utils.sendError(response ,403, "{ \"status\": \"failure\", \"message\": \"You can't delete this review id.\" }");
+				return "{ \"status\": \"failure\", \"message\": \"You can't delete this review id.\" }";
 			}
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	

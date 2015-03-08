@@ -28,8 +28,8 @@ public class SignupServlet {
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {
 		if (Utils.isUsernameExist(username) == true) {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'username: " + username + " already exists.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"username: " + username + " already exists.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"username: " + username + " already exists.\" }";
 		} else {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashedPassword = passwordEncoder.encode(password);

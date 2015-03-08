@@ -26,8 +26,8 @@ public class BestTitlesServlet {
 			List<String> res = Utils.getBestTitles(category_id);
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	
@@ -43,8 +43,8 @@ public class BestTitlesServlet {
 			List<String> res = Utils.getBestTitlesForUser(category_id, user_id);
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 }

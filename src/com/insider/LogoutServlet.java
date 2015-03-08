@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
+import utils.Utils;
+
 @Path("/logout")
 public class LogoutServlet {
 	@POST
@@ -19,8 +21,8 @@ public class LogoutServlet {
 			session.invalidate();
 			return "{ status: 'success', message: ' User logout success'}";
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'User was not logged in' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 }

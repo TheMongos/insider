@@ -1,2 +1,21 @@
-<h1>user page</h1>
-<div>{{res}}</div>
+<div>
+	<img ng-src="images/users/{{user.user_id}}.jpg" />
+	<div>{{user.username}}</div>
+	<p>Followers: {{userDetails.userFollowersCount}}</p>
+	<p>Following: {{userDetails.userFollowingCount}}</p>
+	<p ng-show="showEdit">edit my profile</p>
+	<button id="follow" ng-show="showFollow" ng-class="class" ng-click="startFollowing(user.user_id)">{{followingLabel}}</button>
+	<ul>
+		<li ng-repeat="rank in ranksArr"><p>{{rank.name}} -</p> <img
+			ng-src="images/items/{{rank.item_id}}.jpg" />
+			<p>rank: {{rank.rank}}</p>
+			<p ng-if="rank.review_id">
+				<button ng-click="getReview($index ,rank.review_id)">read
+					review</button>
+			</p>
+			<div ng-if="rank.review_id" id="review-{{rank.review_id}}" ng-show="review{{rank.review_id}}" >
+			{{rank.reviewText}}</div>
+		</li>
+	</ul>
+	<a href="#/user/1">To See Elad</a>
+</div>

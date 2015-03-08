@@ -66,7 +66,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		List<String> res = new ArrayList<String>();
 		Set<String> followingSet = getUserFollowingSet(user_id);
 		for(String following_id: followingSet){
-			res.add("{'user_id': " + following_id + ", 'username': '" + getUsername(Integer.parseInt(following_id)) + "' }");
+			res.add("{\"user_id\": " + following_id + ", \"username\": \"" + getUsername(Integer.parseInt(following_id)) + "\" }");
 		}
 		
 		return res;
@@ -114,7 +114,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		List<String> res = new ArrayList<String>();
 		List<String> followersList = getUserFollowersList(user_id);
 		for(String follower_id: followersList){
-			res.add("{'user_id': " + follower_id + ", 'username': '" + getUsername(Integer.parseInt(follower_id)) + "' }");
+			res.add("{\"user_id\": " + follower_id + ", \"username\": \"" + getUsername(Integer.parseInt(follower_id)) + "\" }");
 		}
 		return res;
 	}
@@ -232,7 +232,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		for(TypedTuple<String> tt : set){
 			System.out.println(tt.getScore() + " " + tt.getValue());
 			String item_name = valOps.get(tt.getValue() + ":itemName");
-			res.add("{ 'item_id':'" +  tt.getValue() + "', 'avg':" + tt.getScore() + ", 'item_name': '" + item_name + "'}");
+			res.add("{ \"item_id\":\"" +  tt.getValue() + "\", \"avg\":" + tt.getScore() + ", \"item_name\": \"" + item_name + "\"}");
 		}
 		return res;
 	}
@@ -247,7 +247,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		for(TypedTuple<String> tt : set){
 			System.out.println(tt.getScore() + " " + tt.getValue());
 			String item_name = valOps.get(tt.getValue() + ":itemName");
-			res.add("{ 'item_id':'" +  tt.getValue() + "', 'avg':" + tt.getScore() + ", 'item_name': '" + item_name + "'}");
+			res.add("{ \"item_id\":\"" +  tt.getValue() + "\", \"avg\":" + tt.getScore() + ", \"item_name\": \"" + item_name + "\"}");
 		}
 		return res;
 	}
@@ -376,9 +376,9 @@ public class RedisUtilsTemplate implements RedisDAO {
 		String username = valOps.get(user_id + ":username");
 
 		if(review_id != 0){
-			val = "{ 'username':'" + username + "', 'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "','review_id':" + review_id + "}";
+			val = "{ \"username\":\"" + username + "\", \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\",\"review_id\":" + review_id + "}";
 		} else {
-			val = "{ 'username':'" + username + "', 'rank':" + rank + ",'item_id':" + item_id + ",'name':'" + item_name + "'}";
+			val = "{ \"username\":\"" + username + "\", \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\"}";
 		}
 
 		valOps.set(user_id + ":userRankID:" + item_id, val);

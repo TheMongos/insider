@@ -29,8 +29,8 @@ public class RankServlet {
 			//already in json format!
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 
@@ -48,8 +48,8 @@ public class RankServlet {
 			Utils.addRankToItem(user_id, item_id, category_id, rank);
 			return "{ status: 'success', message: 'Rank added' }";
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	
@@ -64,8 +64,8 @@ public class RankServlet {
 			//already in json format!
 			return res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	

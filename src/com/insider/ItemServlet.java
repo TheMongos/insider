@@ -33,8 +33,8 @@ public class ItemServlet {
 			ItemRes res = Utils.getItem(item_id, (Integer)session.getAttribute("user_id"));
 			return gson.toJson(res);
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 
@@ -47,6 +47,7 @@ public class ItemServlet {
 			@FormParam("description") String description,
 			@FormParam("other_data") String other_data){
 		System.out.println("im here");
+		//TODO add auth check for Admin user and error response when unauth access
 		Long res = Utils.addItem(category_id, title, year, description, other_data);
 		return res.toString();
 	}

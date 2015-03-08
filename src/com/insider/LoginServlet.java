@@ -1,5 +1,6 @@
 package com.insider;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -62,11 +63,10 @@ public class LoginServlet {
 			session.setAttribute("first_name", user.getFirst_name());
 			session.setAttribute("last_name", user.getLast_name());
 			session.setMaxInactiveInterval(260000);
-			return "{ \"status\": \"success\", \"message\": \"User login! id: " + user.getUser_id() + "\", \"id\": " + user.getUser_id()  + "}";
+			return "{ \"id\": " + user.getUser_id()  + "}";
 		} else {
-			response.setStatus(401);
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }";
 		}
-
 	}
 }

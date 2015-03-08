@@ -1,10 +1,13 @@
 package utils;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -174,7 +177,7 @@ public class Utils {
 		 UserJDBCTemplate userJDBCTemplate = (UserJDBCTemplate) context.getBean("userJDBCTemplate");
 		 List<User> usersList = userJDBCTemplate.getUsers(query);
 		 for(User user: usersList){
-			 res.add("{ 'username': '" + user.getUsername() + "', 'user_id' : '" + user.getUser_id() + "' }");
+			 res.add("{ \"username\": \"" + user.getUsername() + "\", \"user_id\" : " + user.getUser_id() + " }");
 		 }
 		 
 		 return res;
@@ -193,6 +196,17 @@ public class Utils {
 	public static List<String> getBestTitlesForUser(int category_id, int user_id){
 		RedisUtilsTemplate redisUtilsTemplate = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		 return redisUtilsTemplate.getBestTitlesForUser(category_id, user_id);
+	}
+
+	public static void sendError(HttpServletResponse response, int errorCode,
+			String message) {
+		try {
+			response.sendError(errorCode, message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

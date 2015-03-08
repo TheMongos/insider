@@ -27,8 +27,8 @@ public class CategoryServlet {
 			Utils.addCategory(category_id, category_name);
 			return "{ status: 'success', message: 'Category added' }";
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 }

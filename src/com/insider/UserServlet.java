@@ -29,10 +29,10 @@ public class UserServlet {
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
 			 Utils.addUserFollowing(user_id, userFollowingId);
-			return "{ status: 'success', message: 'you are now following " + userFollowingId + "' }";
+			return "{ \"status\": \"success\", \"message\": \"you are now following " + userFollowingId + "\" }";
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 
@@ -46,8 +46,8 @@ public class UserServlet {
 			 List<String> res = Utils.getUserFollowing(user_id);
 			return  res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 
@@ -61,8 +61,8 @@ public class UserServlet {
 			 List<String> res = Utils.getUserFollowers(user_id);
 			return  res.toString();
 		} else {
-			response.setStatus(401);
-			return "{ status: 'failure', message: 'user not logged in.' }";
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
 	
@@ -71,7 +71,6 @@ public class UserServlet {
 	public String getUser(@PathParam("user_id") int user_id,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
-		System.out.println("/user/:userid");
 		Gson gson = new Gson();
 		HttpSession session = request.getSession(false);
 		if(session != null){
@@ -79,7 +78,7 @@ public class UserServlet {
 			 UserRes res = Utils.getUser(my_user_id, user_id);
 			return  "{ \"status\": \"success\", \"user\": " + gson.toJson(res) + "}";
 		} else {
-			response.setStatus(401);
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
@@ -95,7 +94,7 @@ public class UserServlet {
 			 UserRes res = Utils.getUser(my_user_id, my_user_id);
 			return  "{ \"status\": \"success\", \"user\": " + gson.toJson(res) + "}";
 		} else {
-			response.setStatus(401);
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
