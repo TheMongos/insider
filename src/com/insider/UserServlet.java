@@ -28,8 +28,13 @@ public class UserServlet {
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
-			 Utils.addUserFollowing(user_id, userFollowingId);
-			return "{ \"status\": \"success\", \"message\": \"you are now following " + userFollowingId + "\" }";
+			boolean isFollowing = Utils.addUserFollowing(user_id, userFollowingId);
+			if(isFollowing){
+				return "{ \"status\": \"success\", \"message\": \"you are now following " + userFollowingId + "\" }";
+			} else {
+				return "{ \"status\": \"failure\", \"message\": \"you are already following \" }";
+			}
+			
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";

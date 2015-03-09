@@ -273,7 +273,7 @@ public class RedisUtilsTemplate implements RedisDAO {
 		return setOps.members(user_id + ":userFollowing");
 	}
 	
-	private Boolean isUserFollowing(int my_user_id, int user_id) {
+	public Boolean isUserFollowing(int my_user_id, int user_id) {
 		if ( my_user_id == user_id){
 			return null;
 		} else {

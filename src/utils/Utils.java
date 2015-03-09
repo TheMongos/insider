@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -93,14 +96,18 @@ public class Utils {
 		return rd.getFollowingItemRanks(item_id, user_id);
 	}
 	
-	public static void addUserFollowing(int user_id, int userFollow_id){
+	public static boolean addUserFollowing(int user_id, int userFollow_id){
 		RedisUtilsTemplate rd = (RedisUtilsTemplate)context.getBean("redisUtilsTemplate");
 		if(user_id == userFollow_id){
-			return;
+			return false;
+		}
+		if(rd.isUserFollowing(user_id, userFollow_id)){
+			return false;
 		}
 		rd.addUserFollowing(user_id, userFollow_id);
 		rd.addUserFollowers(userFollow_id, user_id);
 		rd.setUsersRankHistToNewFollower(userFollow_id, user_id);
+		return true;
 	}
 
 	public static void addCategory(byte category_id, String category_name) {
@@ -198,15 +205,15 @@ public class Utils {
 		 return redisUtilsTemplate.getBestTitlesForUser(category_id, user_id);
 	}
 
-	public static void sendError(HttpServletResponse response, int errorCode,
-			String message) {
-		try {
-			response.sendError(errorCode, message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	public static void sendError(HttpServletResponse response, int errorCode, String message) {
+		throw new WebApplicationException(Response.status(errorCode).entity(message).type(MediaType.APPLICATION_JSON).build());
 	}
 	
+	public static void createResponse(HttpServletResponse response, String message) {
+		try {
+			response.getWriter().write(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -1,23 +1,20 @@
 package com.insider;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
-
-import com.google.gson.JsonObject;
 
 import utils.Utils;
 import db.mysql.User;
@@ -65,8 +62,8 @@ public class LoginServlet {
 			session.setMaxInactiveInterval(260000);
 			return "{ \"id\": " + user.getUser_id()  + "}";
 		} else {
-			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }");
-			return "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }";
+			Utils.sendError(response, 401, "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect!!!.\" }";
 		}
 	}
 }

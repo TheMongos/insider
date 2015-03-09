@@ -22,7 +22,7 @@ import com.google.gson.GsonBuilder;
 @Path("/item")
 public class ItemServlet {
 
-	@GET @Path("/id/{item_id}")
+	@GET @Path("/{item_id}")
 	@Produces("application/json")
 	public String getItem(@PathParam("item_id") int item_id,
 			@Context HttpServletRequest request,

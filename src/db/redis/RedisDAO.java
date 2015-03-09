@@ -123,4 +123,9 @@ public interface RedisDAO {
 	 * This is the method to be used to list down all the best Titles of a category.
 	 */
 	public List<String> getBestTitlesForUser(int category_id, int user_id);
+	
+	/**
+	 * This is the method to check if user following other user.
+	 */
+	public Boolean isUserFollowing(int my_user_id, int user_id);
 }

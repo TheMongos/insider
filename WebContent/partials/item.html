@@ -1,0 +1,15 @@
+<h1>{{item.itemDetails.title}}</h1>
+<img ng-src="images/items/{{item.itemDetails.item_id}}.jpg"/>
+<p>User rank: {{userRank.rank}}</p>
+<button ng-click="addReview()">write review</button>
+<div ng-show="showReview">
+<p>{{message}}</p>
+<textarea maxlength="499" ng-model="reviewText"></textarea>
+<button ng-click="sendReview()">send review</button>
+</div>
+<div ng-hide="hideItem">
+<p>Friend's rank: {{item.itemRanks.followingAvg}}</p>
+<p>Total rank: {{item.itemRanks.totalAvg}}</p>
+<button ng-click="showDescription()">description</button>
+<p ng-show="description">{{item.itemDetails.description}}</p>
+</div>
