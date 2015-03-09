@@ -150,12 +150,20 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	Item.get(function(res){
 		$scope.item = res;
 		console.log(res);
+		//
+		$scope.reviewButton = "write review";
+		
 		if (res.itemRanks.userRank) {
 			$scope.userRank = JSON.parse(res.itemRanks.userRank);
-			$scope.rank = $scope.userRank.rank;
+			$scope.myRank = $scope.userRank.rank;
+			if($scope.userRank.review_id){
+				$scope.getReview($scope.userRank.review_id);
+			}
 		} else {
-			$scope.rank = 0;
+			$scope.myRank = 0;
 		}
+		
+		$scope.getFollowingRanks();
 	}, function (error){
 		$location.path('/login').replace();
 	});	
@@ -170,22 +178,65 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	
 	$scope.addRank = function(){
 		$scope.message = "";
-		//TODO send rank to server 
+		console.log($scope.myRank);
+		if($scope.myRank != 0){
+			var Rank = $resource('/insider/request/rank/:category_id/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank});
+			Rank.save(function(res){
+				console.log(res);
+				
+			},
+					function (error){
+				$location.path('/login').replace();
+			});
+		}
 	}
 	
 	$scope.addReview = function(){
-		$scope.showReview =true;
-		$scope.hideItem = true;
-	}
-	
-	$scope.sendReview = function(){
-		if($scope.rank){
-			//TODO  send review to server
-			console.log($scope.reviewText.length);
+		if($scope.showReview){
+			$scope.reviewButton = "write review";
 			$scope.showReview =false;
 			$scope.hideItem = false;
 		} else {
+			$scope.reviewButton = "close review";
+			$scope.showReview =true;
+			$scope.hideItem = true;
+		}	
+	}
+	
+	$scope.sendReview = function(){
+		if($scope.myRank != 0){
+			var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
+			var Rank = $resource('/insider/request/review');
+			Rank.save(obj, function(res){
+				$scope.getReview(res.review_id);
+			},
+					function (error){
+				$location.path('/login').replace();
+			});
+			$scope.addReview();
+		} else {
 			$scope.message = "please rank the title";
 		}
+	}
+	
+	$scope.getFollowingRanks = function(){
+			var Rank = $resource('/insider/request/rank/following/:item_id', {item_id : $scope.item.itemDetails.item_id});
+			$scope.ranksArr =Rank.query(function(res){
+				console.log(res);
+			},
+					function (error){
+				$location.path('/login').replace();
+			});
+	}
+	
+	$scope.getReview = function(review_id){
+		var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+		Review.get(function(res){
+			console.log(res);
+			$scope.reviewText = res.review_text;
+		},
+				function (error){
+			$location.path('/login').replace();
+		});
 	}
 });

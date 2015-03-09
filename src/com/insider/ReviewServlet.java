@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONObject;
+
 import utils.Utils;
 
 import com.google.gson.Gson;
@@ -41,25 +43,48 @@ public class ReviewServlet {
 
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes("application/json")
 	@Produces("application/json") 
-	public String postReview(@FormParam("category_id") int category_id,
-			@FormParam("item_id") int item_id,
-			@FormParam("rank") int rank,
-			@FormParam("review_text") String review_text,
+	public String postReview(String reviewObj,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response){
+		JSONObject jsonObj = new JSONObject(reviewObj);
+		int category_id =  jsonObj.getInt("category_id");
+		int item_id =jsonObj.getInt("item_id");
+		int rank = jsonObj.getInt("rank");
+		String review_text =  jsonObj.getString("review_text");;
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
 			int user_id = (Integer)session.getAttribute("user_id");
 			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
-			return "{ \"status\": \"success\", \"message\": \"Review was created successfully! review id: " + res.toString() + "\" }";
+			return "{ \"status\": \"success\", \"message\": \"Review was created successfully!\",  \"review_id\": " + res + " }";
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
 			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
 		}
 	}
+	
+//	@POST
+//	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//	@Produces("application/json") 
+//	public String postReview(@FormParam("category_id") int category_id,
+//			@FormParam("item_id") int item_id,
+//			@FormParam("rank") int rank,
+//			@FormParam("review_text") String review_text,
+//			@Context HttpServletRequest request,
+//			@Context HttpServletResponse response){
+//		HttpSession session = request.getSession(false);
+//		if(session != null){
+//			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
+//			int user_id = (Integer)session.getAttribute("user_id");
+//			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
+//			return "{ \"status\": \"success\", \"message\": \"Review was created successfully! review id: " + res.toString() + "\" }";
+//		} else {
+//			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+//			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
+//		}
+//	}
 	
 	@DELETE @Path("/{review_id}/{item_id}")
 	@Produces("application/json")
