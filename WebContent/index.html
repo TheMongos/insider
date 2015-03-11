@@ -8,10 +8,16 @@
 <script src="lib/angular/angular-route.js"></script>
 <script src="lib/angular/angular-resource.js"></script>
 <script src="js/insider.js"></script>	
+<style type="text/css">
+.selected {
+color : red;
+}
+</style>
 </head>
 <body>
 <header >Insider</header>
 <div class="main" ng-view></div>
-<footer id="navigator" ><a href="#/user">my profile</a></footer>
+
+<footer id="navigator" ><a href="#/user">my profile</a> <a href="#/top">top titles</a></footer>
 </body>
 </html>

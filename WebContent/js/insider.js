@@ -3,6 +3,10 @@ var myApp = angular.module('insider', ['ngRoute', 'ngResource']);
 myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 
 		$routeProvider
+			.when('/top', {
+				templateUrl: 'partials/top.html',
+				controller: 'top'
+			})
 			.when('/item/:item_id', {
 				templateUrl: 'partials/item.html',
 				controller:'item'
@@ -239,4 +243,50 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		});
 	}
+});
+
+myApp.controller('top', function($scope,$resource, $location, $routeParams){
+	$scope.categories = [
+	     {name:'Movies', id: 1},
+	     {name:'TV', id: 2}
+	];
+	
+	$scope.selectedCat = $scope.categories[0];
+	$scope.showFollowing = true;
+	
+	
+	$scope.changeCategory = function() {
+		if ($scope.showFollowing) {
+			$scope.getTopFollowing();
+		} else {
+			$scope.getTopAll();
+		}
+	}
+	
+	$scope.getTopAll = function() {
+		$scope.showFollowing = false;
+		
+		//activation check 
+		var All = $resource('/insider/request/best/:category_id', { category_id : $scope.selectedCat.id });
+		$scope.itemsArr = All.query(function(res) {
+			console.log(res);
+		}, function(error) {
+			console.log(error);
+		});	
+	}
+	
+	$scope.getTopFollowing = function() {
+		$scope.showFollowing = true;
+		
+		var Following = $resource('/insider/request/best/following/:category_id', { category_id : $scope.selectedCat.id });
+		$scope.itemsArr = Following.query(function(res) {
+			console.log(res);
+		}, function(error) {
+			console.log(error);
+		});	
+	}
+	
+	//initial
+	$scope.getTopFollowing();
+	
 });

@@ -46,6 +46,7 @@ public class RankServlet {
 		if(session != null){
 			int user_id = (Integer)session.getAttribute("user_id");
 			Utils.addRankToItem(user_id, item_id, category_id, rank);
+			
 			return "{ \"status\": \"success\", \"message\": \"Rank added\" }";
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");

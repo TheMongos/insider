@@ -17,8 +17,8 @@
 <button ng-click="sendReview()">send review</button>
 </div>
 <div ng-hide="hideItem">
-<p>Friend's rank: {{item.itemRanks.followingAvg}}</p>
-<ul>
+<p ng-click="followingRanks = !followingRanks">Friend's rank: {{item.itemRanks.followingAvg}}</p>
+<ul ng-show="followingRanks">
 		<li ng-repeat="rank in ranksArr"><p>{{rank.username}} -</p> <img
 			ng-src="images/users/{{rank.username}}.jpg" />
 			<p>rank: {{rank.rank}}</p>

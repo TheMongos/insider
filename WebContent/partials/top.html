@@ -1,0 +1,13 @@
+<div>
+	<p><select ng-model="selectedCat" ng-change="changeCategory()" ng-options="category.name for category in categories"></select></p>
+	<button ng-click="getTopAll()" ng-class="{selected : !showFollowing}">All</button> <button ng-click="getTopFollowing()" ng-class="{selected : showFollowing}">Following</button>
+	
+	<div>
+		<ul>
+		<li ng-repeat="item in itemsArr"><p>{{item.item_name}} -</p> <img
+			ng-src="images/items/{{item.item_id}}.jpg" />
+			<p>rank: {{item.avg}}</p>
+		</li>
+	</ul>
+	</div>
+</div>
