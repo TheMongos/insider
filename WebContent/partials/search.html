@@ -1,11 +1,31 @@
-<div><input ng-model="searchText"> <button ng-click="search()">search</button></div>
-<button ng-click="changeSearch('movie')" ng-class="{selected : isMovie}">Movie</button> 
-<button  ng-click="changeSearch('tv')" ng-class="{selected : isTv}">TV</button> 
-<button ng-click="changeSearch('user')"  ng-class="{selected : isUser}">User</button>
-<div>
-	<ul>
-		<li ng-if="item.category_id == 2 && isTv" ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}"><img ng-src="images/items/{{item.item_id}}.jpg"> {{item.title}}</a></li>
-		<li ng-if="item.category_id == 1 && isMovie" ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}"><img ng-src="images/items/{{item.item_id}}.jpg"> {{item.title}}</a></li>
-		<li ng-if="isUser" ng-repeat="user in userArr"><a href="#/user/{{user.user_id}}"><img ng-src="images/users/{{user.username}}.jpg"> {{user.username}}</a></li>
-	</ul>
+<div id="searchTemplate" class="container-fluid">
+	<div class="row page-header container-fluid">
+		<div id="searchDiv" class="input-group col-md-12 col-xs-12">
+			<input ng-model="searchText" placeholder="search for..."
+				class="form-control"> <span class="input-group-btn">
+				<button class="btn btn-default" ng-click="search()">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</span>
+		</div>
+		<div id="categoryGroup" class="row">
+			<span class="col-xs-4 categoryBtn" ng-click="changeSearch('movie')" ng-class="{selected : isMovie}">Movie</span>
+			<span class="col-xs-4 categoryBtn" ng-click="changeSearch('tv')" ng-class="{selected : isTv}">TV</span>
+			<span class="col-xs-4 categoryBtn" ng-click="changeSearch('user')"	ng-class="{selected : isUser}">User</span>
+		</div>
+	</div>
+	<div>
+		<ul>
+			<li ng-if="item.category_id == 2 && isTv" ng-repeat="item in itemArr"><a
+				href="#/item/{{item.item_id}}"><img
+					ng-src="images/items/{{item.item_id}}.jpg"> {{item.title}}</a></li>
+			<li ng-if="item.category_id == 1 && isMovie"
+				ng-repeat="item in itemArr"><a href="#/item/{{item.item_id}}"><img
+					ng-src="images/items/{{item.item_id}}.jpg"> {{item.title}}</a></li>
+			<li ng-if="isUser" ng-repeat="user in userArr"><a
+				href="#/user/{{user.user_id}}"><img
+					ng-src="images/users/{{user.username}}.jpg">
+					{{user.username}}</a></li>
+		</ul>
+	</div>
 </div>

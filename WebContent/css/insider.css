@@ -17,30 +17,23 @@ ul
     padding: 0 10px;
 }
 
+li {
+	margin-bottom: 10px;
+}
+
 img {
 	max-width: 100%;
 }
 
-/*
-.btn {
-background-color: #4b688b ;
-  border-color: #143153 ;
-  color: white;
+.page-header {
+	margin-top: 0px;
 }
 
-.btn:action{
-	background-color: #738ba7 ;
-	border-color: #143153 ;
+.reviewBtn:focus, .reviewBtn:active {
+	outline:none;
+  	background-color: white;
 }
- .btn:focus{
-	background-color: #738ba7 ;
-	border-color: #143153 ;
- }
-.btn:hover {
-	background-color: #738ba7 ;
-	border-color: #143153 ;
-	 color: white;
-}*/
+
 
 /*
 header
@@ -77,4 +70,37 @@ header
 
 #loginTemplate {
  	  width: 350px;
+}
+
+/*
+#userTemplate
+*/
+
+#userTemplate a {
+	color: black;
+}
+
+#userTemplate #userDetails .userName  {
+	margin-top: 5px;
+}
+#userTemplate #userDetails button.follow {
+   pointer-events: none;
+ }
+ 
+/*
+#searchTemplate
+*/
+
+#searchTemplate #categoryGroup .categoryBtn{
+	text-align: center;
+	border-right: 1px solid #eee;
+	font-weight: bold;
+}
+
+#searchTemplate #searchDiv {
+	margin-bottom: 10px;
+}
+
+#searchTemplate #categoryGroup .categoryBtn:last-child{
+	border-right: none;
 }
