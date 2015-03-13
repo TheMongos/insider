@@ -1,8 +1,8 @@
 <div>
 	<img ng-src="images/users/{{user.username}}.jpg" />
 	<div>{{user.username}}</div>
-	<p>Followers: {{userDetails.userFollowersCount}}</p>
-	<p>Following: {{userDetails.userFollowingCount}}</p>
+	<a href="#/followers/{{user.user_id}}"><p>Followers: {{userDetails.userFollowersCount}}</p></a>
+	<a href="#/following/{{user.user_id}}"><p>Following: {{userDetails.userFollowingCount}}</p></a>
 	<p ng-show="showEdit">edit my profile</p>
 	<button id="follow" ng-show="showFollow" ng-class="class" ng-click="startFollowing(user.user_id)">{{followingLabel}}</button>
 	<ul>
@@ -17,8 +17,6 @@
 			{{rank.reviewText}}</div>
 		</li>
 	</ul>
-	<a href="#/user/1">To See Elad</a>
-	<br>
-	<a href="#/item/7">To See ???</a>
+	<button ng-click="logout()">logout</button>
 	
 </div>

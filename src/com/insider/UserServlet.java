@@ -71,6 +71,38 @@ public class UserServlet {
 		}
 	}
 	
+	@GET @Path("/following/{user_id}")
+	@Produces("application/json")
+	public String getFollowing(@PathParam("user_id") int user_id,
+			@Context HttpServletRequest request,
+			@Context HttpServletResponse response){
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			 List<String> res = Utils.getUserFollowing(user_id);
+			return  res.toString();
+		} else {
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
+		}
+	}
+
+	@GET @Path("/followers/{user_id}")
+	@Produces("application/json")
+	public String getFollowers(@PathParam("user_id") int user_id,
+			@Context HttpServletRequest request,
+			@Context HttpServletResponse response){
+		HttpSession session = request.getSession(false);
+		if(session != null){
+			 List<String> res = Utils.getUserFollowers(user_id);
+			return  res.toString();
+		} else {
+			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");
+			return "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }";
+		}
+	}
+	
+	
+	
 	@GET @Path("/{user_id}")
 	@Produces("application/json")
 	public String getUser(@PathParam("user_id") int user_id,

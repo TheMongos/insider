@@ -7,6 +7,10 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 				templateUrl: 'partials/top.html',
 				controller: 'top'
 			})
+			.when('/search', {
+				templateUrl: 'partials/search.html',
+				controller: 'search'
+			})
 			.when('/item/:item_id', {
 				templateUrl: 'partials/item.html',
 				controller:'item'
@@ -18,6 +22,14 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 			.when('/user/', {
 				templateUrl: 'partials/user.html',
 				controller:'user'
+			})
+			.when('/following/:user_id', {
+				templateUrl: 'partials/following.html',
+				controller:'following'
+			})
+			.when('/followers/:user_id', {
+				templateUrl: 'partials/followers.html',
+				controller:'followers'
 			})
 			.when('/login', {
 				templateUrl: 'partials/login.html',
@@ -38,6 +50,7 @@ myApp.controller('login', function($scope,$resource, $location){
 	var Login = $resource('/insider/request/login');
 	$scope.login = function (){
 		$scope.message ="";
+		$scope.messageShow = false;
 		var obj = {username: $scope.username, password: $scope.password};
 		Login.save(obj, function(res){
 					$('#navigator').css("display","block");
@@ -47,6 +60,7 @@ myApp.controller('login', function($scope,$resource, $location){
 					console.log(error);
 					if(error.status == 401){
 						$scope.message = error.data.message;
+						$scope.messageShow = true;
 					}
 					
 			});
@@ -147,6 +161,17 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 		}
 	}
 	
+	$scope.logout = function(){
+		var Logout = $resource('/insider/request/logout');
+		
+		Logout.save(function(res){
+				console.log(res)
+				$location.path('/login').replace();
+			}, function (error){
+				$location.path('/login').replace();
+			})
+	}
+	
 });
 
 myApp.controller('item', function($scope,$resource, $location, $routeParams){
@@ -187,7 +212,6 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			var Rank = $resource('/insider/request/rank/:category_id/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank});
 			Rank.save(function(res){
 				console.log(res);
-				
 			},
 					function (error){
 				$location.path('/login').replace();
@@ -213,6 +237,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			var Rank = $resource('/insider/request/review');
 			Rank.save(obj, function(res){
 				$scope.getReview(res.review_id);
+				$scope.userRank.review_id = res.review_id;
 			},
 					function (error){
 				$location.path('/login').replace();
@@ -225,7 +250,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	
 	$scope.getFollowingRanks = function(){
 			var Rank = $resource('/insider/request/rank/following/:item_id', {item_id : $scope.item.itemDetails.item_id});
-			$scope.ranksArr =Rank.query(function(res){
+			$scope.ranksArr = Rank.query(function(res){
 				console.log(res);
 			},
 					function (error){
@@ -240,6 +265,18 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$scope.reviewText = res.review_text;
 		},
 				function (error){
+			$location.path('/login').replace();
+		});
+	}
+	
+	$scope.deleteReview = function() {
+		var Delete = $resource('/insider/request/review/:review_id/:item_id', { review_id: $scope.userRank.review_id , item_id: $scope.item.itemDetails.item_id });
+		
+		Delete.remove(function(res){
+			$scope.reviewText = "";
+			$scope.userRank.review_id = "";
+		},
+		function (error){
 			$location.path('/login').replace();
 		});
 	}
@@ -271,7 +308,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		$scope.itemsArr = All.query(function(res) {
 			console.log(res);
 		}, function(error) {
-			console.log(error);
+			$location.path('/login').replace();
 		});	
 	}
 	
@@ -282,11 +319,69 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		$scope.itemsArr = Following.query(function(res) {
 			console.log(res);
 		}, function(error) {
-			console.log(error);
+			$location.path('/login').replace();
 		});	
 	}
 	
 	//initial
 	$scope.getTopFollowing();
 	
+});
+
+myApp.controller('search', function($scope,$resource, $location, $routeParams){
+	$scope.isMovie = true;
+	
+	$scope.changeSearch = function(clicked){
+		if (clicked == "tv"){
+			$scope.isTv = true; $scope.isMovie = false; $scope.isUser = false;
+		} else if (clicked == "movie"){
+			$scope.isMovie = true; $scope.isTv = false; $scope.isUser = false;
+		} else if (clicked == "user"){
+			$scope.isUser = true; $scope.isMovie = false; $scope.isTv = false;
+		} 
+	}
+	
+	$scope.search = function(){
+		if ($scope.isUser) { 
+			var SearchUser = $resource('/insider/request/search/user/:query', { query : $scope.searchText });
+			
+			$scope.userArr = SearchUser.query(function(res) {
+				console.log(res);
+				// do something
+			}, function(error) {
+				$location.path('/login').replace();
+			});
+		} else { 
+			var SearchItem = $resource('/insider/request/search/item/:query', { query : $scope.searchText });
+
+			$scope.itemArr = SearchItem.query(function(res) {
+				console.log(res);
+				// do something
+			}, function(error) {
+				$location.path('/login').replace();
+			});
+		}
+	}
+});
+
+myApp.controller('following', function($scope,$resource, $location, $routeParams){
+	var Following = $resource('/insider/request/user/following/:user_id', {user_id: $routeParams.user_id});
+	
+	$scope.followArr = Following.query(function(res){
+			console.log(res);
+		},
+		function (error){
+			$location.path('/login').replace();
+		});
+});
+
+myApp.controller('followers', function($scope,$resource, $location, $routeParams){
+	var Followers = $resource('/insider/request/user/followers/:user_id', {user_id: $routeParams.user_id});
+	
+	$scope.followArr = Followers.query(function(res){
+			console.log(res);
+		},
+		function (error){
+			$location.path('/login').replace();
+		});
 });

@@ -1,0 +1,7 @@
+<p>followers</p>
+<div>
+<ul>
+<li ng-repeat="user in followArr"><span>{{$index +1}}</span><a href="#/user/{{user.user_id}}"><img ng-src="images/users/{{user.username}}.jpg"> {{user.username}}</a>
+</li>
+</ul>
+</div>

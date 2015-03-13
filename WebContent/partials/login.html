@@ -1,9 +1,13 @@
-<h1>Login</h1>
-<p>{{message}}</p>
-<label for="username">username:</label>
-<input type="text" id="username" ng-model="username">
-<br>
-<label for="password">password:</label>
-<input type="text" id="password" ng-model="password">
-<button ng-click="login()">login</button>
-<p><a href="#/signup">Signup</a></p>
+<div id="loginTemplate" class="container"><div class="form-signin">
+<p ng-show="messageShow" class="alert alert-danger">{{message}}</p>
+<label class="sr-only" for="username">username:</label>
+<input placeholder="username" class="form-control" type="text" id="username" ng-model="username">
+
+<label class="sr-only" for="password">password:</label>
+<input placeholder="password" class="form-control" type="text" id="password" ng-model="password">
+<button class="btn btn-primary btn-block loginBtn" ng-click="login()">login</button>
+<div>
+<p>Don't have an account? <a href="#/signup">Signup</a></p>
+</div>
+</div>
+</div>

@@ -4,7 +4,7 @@
 	
 	<div>
 		<ul>
-		<li ng-repeat="item in itemsArr"><p>{{item.item_name}} -</p> <img
+		<li ng-repeat="item in itemsArr"><p><span>{{$index +1}}. </span>{{item.item_name}} -</p> <img
 			ng-src="images/items/{{item.item_id}}.jpg" />
 			<p>rank: {{item.avg}}</p>
 		</li>

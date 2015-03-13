@@ -113,10 +113,10 @@ public class ItemJDBCTemplate implements ItemDAO {
 	@Override
 	public List<String> getTitles(String query) {
 		List<String> res = new ArrayList<String>();
-		String SQL = "select i.item_id, i.title, c.category_name from Item i join Category c on i.category_id = c.category_id where lower(i.title) like lower(?)";
+		String SQL = "select i.category_id, i.item_id, i.title, c.category_name from Item i join Category c on i.category_id = c.category_id where lower(i.title) like lower(?)";
 		List<Map<String, Object>> rows = jdbcTemplateObject.queryForList(SQL, query+ "%");
 		for(@SuppressWarnings("rawtypes") Map row : rows){
-			res.add("{ 'item_id' : " + (Integer)row.get("item_id") + ", 'title' : '" + (String)row.get("title") + "', 'category_name' : '" + (String)row.get("category_name") +"'}");
+			res.add("{ \"item_id\" : " + (Integer)row.get("item_id") + ", \"title\" : \"" + (String)row.get("title") + "\", \"category_id\": " + (Integer)row.get("category_id") + ", \"category_name\" : \"" + (String)row.get("category_name") +"\"}");
 		}
 		//List<User> reviews = jdbcTemplateObject.query(SQL,new Object[] { query+"%" } , new UserMapper());
 		return res;

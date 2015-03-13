@@ -1,0 +1,80 @@
+/*
+general
+*/
+
+body {
+	padding-bottom: 50px;
+	padding-top: 60px;
+}
+
+.selected {
+	color : red;
+}
+
+ul
+{
+    list-style-type: none;
+    padding: 0 10px;
+}
+
+img {
+	max-width: 100%;
+}
+
+/*
+.btn {
+background-color: #4b688b ;
+  border-color: #143153 ;
+  color: white;
+}
+
+.btn:action{
+	background-color: #738ba7 ;
+	border-color: #143153 ;
+}
+ .btn:focus{
+	background-color: #738ba7 ;
+	border-color: #143153 ;
+ }
+.btn:hover {
+	background-color: #738ba7 ;
+	border-color: #143153 ;
+	 color: white;
+}*/
+
+/*
+header
+*/
+
+#header {
+	height: 50px;
+	background-color: #2b4a6f;/* #3b4058 ; /*#3CA2A2; /* #195467 */
+}
+
+#logo-header {
+	width: 350px;
+	margin-top: 10px;
+}
+
+#logo-header img{
+  display: block;
+  margin: auto;
+  height: 30px;
+  width: auto;
+}
+
+/*
+#loginTemplate
+*/
+
+#loginTemplate input {
+	  margin-bottom: 10px;
+}
+
+#loginTemplate .loginBtn {
+	margin-bottom: 10px;
+}
+
+#loginTemplate {
+ 	  width: 350px;
+}
