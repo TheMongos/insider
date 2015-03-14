@@ -46,7 +46,6 @@ public class ItemServlet {
 			@FormParam("year") String year,
 			@FormParam("description") String description,
 			@FormParam("other_data") String other_data){
-		System.out.println("im here");
 		//TODO add auth check for Admin user and error response when unauth access
 		Long res = Utils.addItem(category_id, title, year, description, other_data);
 		return res.toString();

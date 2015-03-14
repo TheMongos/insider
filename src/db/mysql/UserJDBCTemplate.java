@@ -38,7 +38,7 @@ public class UserJDBCTemplate implements UserDAO{
 				+ ", UNIQUE(username)"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";
 
-		System.out.println(SQL);
+
 
 		jdbcTemplateObject.execute(SQL);
 	}

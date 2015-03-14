@@ -55,7 +55,6 @@ public class ReviewServlet {
 		String review_text =  jsonObj.getString("review_text");;
 		HttpSession session = request.getSession(false);
 		if(session != null){
-			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
 			int user_id = (Integer)session.getAttribute("user_id");
 			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
 			return "{ \"status\": \"success\", \"message\": \"Review was created successfully!\",  \"review_id\": " + res + " }";
@@ -76,7 +75,6 @@ public class ReviewServlet {
 //			@Context HttpServletResponse response){
 //		HttpSession session = request.getSession(false);
 //		if(session != null){
-//			System.out.println(category_id +" "+item_id +" "+rank +" "+review_text);
 //			int user_id = (Integer)session.getAttribute("user_id");
 //			Long res = Utils.addReview(user_id, category_id, item_id, rank, review_text);
 //			return "{ \"status\": \"success\", \"message\": \"Review was created successfully! review id: " + res.toString() + "\" }";

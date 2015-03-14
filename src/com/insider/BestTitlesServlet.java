@@ -24,7 +24,6 @@ public class BestTitlesServlet {
 		HttpSession session = request.getSession(false);
 		if(session != null){
 			List<String> res = Utils.getBestTitles(category_id);
-			System.out.println("here "+ res.toString());
 			return res.toString();
 		} else {
 			Utils.sendError(response ,401, "{ \"status\": \"failure\", \"message\": \"user not logged in.\" }");

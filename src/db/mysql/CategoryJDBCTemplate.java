@@ -22,7 +22,6 @@ public class CategoryJDBCTemplate implements CategoryDAO{
 				+ ", primary key (category_id)"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";
 
-		System.out.println(SQL);
 
 		jdbcTemplateObject.execute(SQL);	
 	}

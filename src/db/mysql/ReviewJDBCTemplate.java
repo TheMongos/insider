@@ -41,7 +41,7 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 				+ "		ON UPDATE CASCADE ON DELETE CASCADE"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";
 
-		System.out.println(SQL);
+
 
 		jdbcTemplateObject.execute(SQL);
 	}

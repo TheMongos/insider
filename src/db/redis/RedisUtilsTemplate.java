@@ -230,7 +230,6 @@ public class RedisUtilsTemplate implements RedisDAO {
 		ZSetOperations<String, String> zsetOps =  redisTemplate.opsForZSet();
 		Set<TypedTuple<String>> set= zsetOps.reverseRangeWithScores(category_id + ":bestTitles", 0, 25);
 		for(TypedTuple<String> tt : set){
-			System.out.println(tt.getScore() + " " + tt.getValue());
 			String item_name = valOps.get(tt.getValue() + ":itemName");
 			res.add("{ \"item_id\":\"" +  tt.getValue() + "\", \"avg\":" + tt.getScore() + ", \"item_name\": \"" + item_name + "\"}");
 		}
@@ -245,7 +244,6 @@ public class RedisUtilsTemplate implements RedisDAO {
 		ZSetOperations<String, String> zsetOps =  redisTemplate.opsForZSet();
 		Set<TypedTuple<String>> set= zsetOps.reverseRangeWithScores(user_id + ":" + category_id +  ":userFollowingBestTitles", 0, 25);
 		for(TypedTuple<String> tt : set){
-			System.out.println(tt.getScore() + " " + tt.getValue());
 			String item_name = valOps.get(tt.getValue() + ":itemName");
 			res.add("{ \"item_id\":\"" +  tt.getValue() + "\", \"avg\":" + tt.getScore() + ", \"item_name\": \"" + item_name + "\"}");
 		}

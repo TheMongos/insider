@@ -42,7 +42,7 @@ public class ItemJDBCTemplate implements ItemDAO {
 				+ "		ON UPDATE CASCADE ON DELETE SET NULL"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";
 
-		System.out.println(SQL);
+
 
 		jdbcTemplateObject.execute(SQL);
 	}
