@@ -45,6 +45,17 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 	});
 }]);
 
+myApp.directive('fallbackSrc', function () {
+	var fallbackSrc = {
+			link: function postLink(scope, iElement, iAttrs) {
+				iElement.bind('error', function() {
+					angular.element(this).attr("src", iAttrs.fallbackSrc);
+				});
+			}
+	}
+	return fallbackSrc;
+});
+
 myApp.controller('login', function($scope,$resource, $location){
 	$('#navigator').css("display","none");
 	var Login = $resource('/insider/request/login');
@@ -71,18 +82,35 @@ myApp.controller('login', function($scope,$resource, $location){
 myApp.controller('signup', function($scope,$resource, $location){
 	$('#navigator').css("display","none");
 	var Login = $resource('/insider/request/signup');
-	$scope.signup = function (){
-		$scope.message ="";
-		var obj = {username: $scope.username, password: $scope.password, firstName: $scope.firstName, lastName: $scope.lastName, email: $scope.email};
-		Login.save(obj, function(res){
-			$('#navigator').css("display","block");
-			$location.path('/login').replace();
-		}, 
-		function(error){
-			if(error.status == 409){
-				$scope.message = error.data.message;
-			}
-		});
+	$scope.signup = function (myForm){
+		console.log(myForm);
+		if(myForm.emailField.$valid == false){
+			$scope.message = "email incorrect";
+			$scope.errorShow = true;
+		} else if ($scope.password != $scope.repassword) {
+			$scope.message = "passwords don't match. try again";
+			$scope.password = $scope.repassword = "";
+			$scope.errorShow = true;
+			$("#passwordDiv").addClass("has-error");
+		} else if(myForm.$valid == false){
+			$scope.message = "can't leave fields empty";
+			$scope.errorShow = true;
+		} else {
+			$scope.message ="";
+			$scope.errorShow = false;
+			$("#passwordDiv").removeClass("has-error");
+			var obj = {username: $scope.username, password: $scope.password, firstName: $scope.firstName, lastName: $scope.lastName, email: $scope.email};
+			Login.save(obj, function(res){
+				$('#navigator').css("display","block");
+				$location.path('/login').replace();
+			}, 
+			function(error){
+				if(error.status == 409){
+					$scope.message = error.data.message;
+					$scope.errorShow = true;
+				}
+			});
+		}
 	};
 });
 
@@ -124,7 +152,6 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	function getRanks(user_id){
 		var Ranks = $resource('/insider/request/rank/:user_id', {user_id: user_id});
 		$scope.ranksArr =  Ranks.query();
-		//console.log($scope.ranksArr);
 	}
 
 	$scope.getReview = function(index, review_id){
@@ -176,6 +203,10 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		})
 	}
+	
+	$("img").error(function(){
+        $(this).attr('src',  $(this).attr('fallback-src'));
+	});
 
 });
 
@@ -191,7 +222,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$scope.userRank = JSON.parse(res.itemRanks.userRank);
 			$scope.myRank = $scope.userRank.rank;
 			if($scope.userRank.review_id){
-				$scope.getReview($scope.userRank.review_id);
+				$scope.getFirstReview($scope.userRank.review_id);
 			}
 		} else {
 			$scope.myRank = 0;
@@ -211,6 +242,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.addRank = function(){
+		$scope.errorShow = false;
 		$scope.message = "";
 		console.log($scope.myRank);
 		if($scope.myRank != 0){
@@ -225,6 +257,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.addReview = function(){
+		$(".reviewBtn").css("background-color","white");
 		if($scope.showReview){
 			$scope.reviewButton = "write review";
 			$scope.showReview =false;
@@ -237,19 +270,22 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.sendReview = function(){
-		if($scope.myRank != 0){
-			var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
-			var Rank = $resource('/insider/request/review');
-			Rank.save(obj, function(res){
-				$scope.getReview(res.review_id);
-				$scope.userRank.review_id = res.review_id;
-			},
-			function (error){
-				$location.path('/login').replace();
-			});
-			$scope.addReview();
-		} else {
-			$scope.message = "please rank the title";
+		if($scope.reviewText) {
+			if($scope.myRank != 0){
+				var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
+				var Rank = $resource('/insider/request/review');
+				Rank.save(obj, function(res){
+					$scope.getReview(res.review_id);
+					$scope.userRank.review_id = res.review_id;
+				},
+				function (error){
+					$location.path('/login').replace();
+				});
+				$scope.addReview();
+			} else {
+				$scope.errorShow = true;
+				$scope.message = "please rank the title";
+			}
 		}
 	}
 
@@ -263,7 +299,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		});
 	}
 
-	$scope.getReview = function(review_id){
+	$scope.getFirstReview = function(review_id){
 		var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
 		Review.get(function(res){
 			console.log(res);
@@ -273,6 +309,52 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		});
 	}
+
+	$scope.getReview = function(index, review_id){
+		//var str = "#review-"+review_id;
+		var str2 = "review"+review_id;
+		var reviewBtn = "#reviewBtn"+review_id;
+		$(".reviewBtn").css("background-color","white");
+		if ($scope.ranksArr[index].isOpen){
+			$scope[str2] = false;
+			$scope.ranksArr[index].isOpen = false;
+			$(reviewBtn).html("read review");
+		} else {
+			$(reviewBtn).html("close review");
+			if ($scope.ranksArr[index].hasReview) {
+			} else {
+				var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+				Review.get(function(res){
+					$scope.ranksArr[index].reviewText = res.review_text;
+					$scope.ranksArr[index].hasReview = true;			
+				});
+			}
+			$scope[str2] = true;
+			$scope.ranksArr[index].isOpen = true;
+		}	
+	};$scope.getReview = function(index, review_id){
+		console.log("getReview111");
+		var str2 = "review"+review_id;
+		var reviewBtn = "#reviewBtn"+review_id;
+		$(".reviewBtn").css("background-color","white");
+		if ($scope.ranksArr[index].isOpen){
+			$scope[str2] = false;
+			$scope.ranksArr[index].isOpen = false;
+			$(reviewBtn).html("read review");
+		} else {
+			$(reviewBtn).html("close review");
+			if ($scope.ranksArr[index].hasReview) {
+			} else {
+				var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+				Review.get(function(res){
+					$scope.ranksArr[index].reviewText = res.review_text;
+					$scope.ranksArr[index].hasReview = true;			
+				});
+			}
+			$scope[str2] = true;
+			$scope.ranksArr[index].isOpen = true;
+		}	
+	};
 
 	$scope.deleteReview = function() {
 		var Delete = $resource('/insider/request/review/:review_id/:item_id', { review_id: $scope.userRank.review_id , item_id: $scope.item.itemDetails.item_id });
@@ -285,6 +367,10 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$location.path('/login').replace();
 		});
 	}
+	
+	$("img").error(function(){
+        $(this).attr('src',  $(this).attr('fallback-src'));
+	});
 });
 
 myApp.controller('top', function($scope,$resource, $location, $routeParams){
@@ -348,7 +434,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 			$scope.isUser = true; $scope.isMovie = false; $scope.isTv = false;
 			$scope.search();
 		} 
-		
+
 		if(isUserTemp){
 			$scope.search();
 		}

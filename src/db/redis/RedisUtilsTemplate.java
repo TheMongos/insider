@@ -196,16 +196,16 @@ public class RedisUtilsTemplate implements RedisDAO {
  	}
 	
 	@Override
-	public void setUsersRankHistToNewFollower(int userFollower_id, int user_id){
+	public void setUsersRankHistToNewFollower(int userFollowed_id, int user_id){
 		ValueOperations<String, String> valOps = redisTemplate.opsForValue();
-		List<String> userRanks = getUserRanks(user_id);
+		List<String> userRanks = getUserRanks(userFollowed_id);
 		List<String> keysForFollowing;
 		for(String rank : userRanks){
 			JSONObject jsonObj = new JSONObject(rank);
 			int item_rank = jsonObj.getInt("rank");
 			int item_id = jsonObj.getInt("item_id");
 			String category_id = valOps.get(item_id + ":itemCategory");
-			keysForFollowing = constructKeysForFollowing(userFollower_id, item_id, Integer.valueOf(category_id));
+			keysForFollowing = constructKeysForFollowing(user_id, item_id, Integer.valueOf(category_id));
 			addRankToItemTotalHelper(keysForFollowing, item_rank, false);
 		}
 	}
@@ -376,9 +376,9 @@ public class RedisUtilsTemplate implements RedisDAO {
 		String username = valOps.get(user_id + ":username");
 
 		if(review_id != 0){
-			val = "{ \"username\":\"" + username + "\", \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\",\"review_id\":" + review_id + "}";
+			val = "{ \"username\":\"" + username + "\", \"user_id\": " + user_id + " , \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\",\"review_id\":" + review_id + "}";
 		} else {
-			val = "{ \"username\":\"" + username + "\", \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\"}";
+			val = "{ \"username\":\"" + username + "\" , \"user_id\": " + user_id + ", \"rank\":" + rank + ",\"item_id\":" + item_id + ",\"name\":\"" + item_name + "\"}";
 		}
 
 		valOps.set(user_id + ":userRankID:" + item_id, val);

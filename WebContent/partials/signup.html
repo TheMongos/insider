@@ -1,19 +1,31 @@
-<h1>Signup</h1>
-<p>{{message}}</p>
-<label for="username">username:</label>
-<input type="text" id="username" ng-model="username">
-<br>
-<label for="password">password:</label>
-<input type="text" id="password" ng-model="password">
-<br>
-<label for="firstName">first name:</label>
-<input type="text" id="firstName" ng-model="firstName">
-<br>
-<label for="lastName">last name:</label>
-<input type="text" id="lastName" ng-model="lastName">
-<br>
-<label for="email">email:</label>
-<input type="text" id="email" ng-model="email">
-<br>
-<button ng-click="signup()">signup</button>
-<p><a href="#/login">login</a></p>
+<div id="singupTemplate" class="container-fluid">
+	<h4>Create a new account</h4>
+	<p ng-show="errorShow" class="alert alert-danger">{{message}}</p>
+	<form name="myForm" ng-submit="signup(myForm)">
+		<label for="username">username:</label> <input class="form-control"
+		type="text" id="username" ng-model="username" required> <br> 
+		<div id="passwordDiv" >
+			<label
+			for="password">password:</label> <input class="form-control"
+			type="password" id="password" ng-model="password" required><br> 
+			<label
+			for="repassword">re-type password:</label> <input class="form-control"
+			type="password" id="re-password" ng-model="repassword" required> <br>
+		</div>
+		<label
+		for="firstName">first name:</label> <input class="form-control"
+		type="text" id="firstName" ng-model="firstName" required> <br> 
+		<label
+		for="lastName">last name:</label> <input class="form-control"
+		type="text" id="lastName" ng-model="lastName" required> <br> 
+		<label
+		for="email">email:</label> <input class="form-control" type="email"
+		id="email" ng-model="email" name="emailField" required> <br>
+		<input class="btn btn-success" type="submit" id="submit" value="Signup" />
+	</form>
+	<div>
+		<p>
+			Already have an account? <a href="#/login">Login</a>
+		</p>
+	</div>
+</div>
