@@ -31,6 +31,14 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 		templateUrl: 'partials/followers.html',
 		controller:'followers'
 	})
+	.when('/myfollowing/:user_id/:count', {
+		templateUrl: 'partials/following.html',
+		controller:'myFollowing'
+	})
+	.when('/myfollowers/:user_id/:count', {
+		templateUrl: 'partials/followers.html',
+		controller:'myFollowers'
+	})
 	.when('/login', {
 		templateUrl: 'partials/login.html',
 		controller:'login'
@@ -130,10 +138,8 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 
 		getRanks(res.user.user.user_id);
 		if(res.user.userDetails.isMyAccount){
-			$scope.showEdit = true;
-
+			$scope.showIfMyUser = true;
 		} else {
-			$scope.showFollow = true;
 			if(res.user.userDetails.isFollowing) {
 				$scope.followingLabel = "Following";
 				$('#follow').addClass("follow");
@@ -474,6 +480,11 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
+	
+	$scope.printArr = function(){
+		console.log("printArr");
+		console.log($scope.followArr);
+	}
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
@@ -485,4 +496,54 @@ myApp.controller('followers', function($scope,$resource, $location, $routeParams
 	function (error){
 		$location.path('/login').replace();
 	});
+});
+
+myApp.controller('myFollowing', function($scope,$resource, $location, $routeParams){
+	getFollowing(function(results){
+		if($routeParams.count == results.rows.length){
+			$scope.followArr = [];
+			for (var i = 0 ; i < results.rows.length ; i++) {
+				var row = results.rows.item(i);
+				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
+			}
+			$scope.$apply();
+		} else {
+			var Followers = $resource('/insider/request/user/following/:user_id', {user_id: $routeParams.user_id});
+			deleteFollowers(function() {});
+			
+			$scope.followArr = Followers.query(function(res){
+				saveFollowers(res);
+			},
+			function (error){
+				$location.path('/login').replace();
+			});
+			
+		}
+	});
+	
+});
+
+myApp.controller('myFollowers', function($scope,$resource, $location, $routeParams){
+	getFollower(function(results){
+		if($routeParams.count == results.rows.length){
+			$scope.followArr = [];
+			for (var i = 0 ; i < results.rows.length ; i++) {
+				var row = results.rows.item(i);
+				$scope.followArr.push({ user_id :  row.user_id , username : row.username });
+			}
+			$scope.$apply();
+		} else {
+			var Followers = $resource('/insider/request/user/followers/:user_id', {user_id: $routeParams.user_id});
+			deleteFollowers(function() {});
+			
+			$scope.followArr = Followers.query(function(res){
+				saveFollowers(res);
+			},
+			function (error){
+				$location.path('/login').replace();
+			});
+			
+		}
+	});
+
 });
