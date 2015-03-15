@@ -2,6 +2,7 @@ package com.insider;
 
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,7 +60,7 @@ public class LoginServlet {
 			session.setAttribute("user_id", user.getUser_id());
 			session.setAttribute("first_name", user.getFirst_name());
 			session.setAttribute("last_name", user.getLast_name());
-			session.setMaxInactiveInterval(260000);
+			//session.setMaxInactiveInterval(260000);
 			return "{ \"id\": " + user.getUser_id()  + "}";
 		} else {
 			Utils.sendError(response, 401, "{ \"status\": \"failure\", \"message\": \"username doesn't exist or password incorrect.\" }");

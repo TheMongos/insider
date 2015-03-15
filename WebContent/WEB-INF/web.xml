@@ -20,5 +20,8 @@
 
 	<session-config>
 		<session-timeout>260000</session-timeout>
+		<cookie-config>
+		<max-age>31536000</max-age>
+		</cookie-config>
 	</session-config>
 </web-app>
