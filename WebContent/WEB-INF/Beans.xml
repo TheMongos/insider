@@ -60,14 +60,18 @@
 	<bean id="reviewJDBCTemplate" class="db.mysql.ReviewJDBCTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
+
 	<!-- Jedis ConnectionFactory -->
 	<bean id="jedisConnFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<property name="hostName" value="pub-redis-19301.us-east-1-3.2.ec2.garantiadata.com" />
+		<property name="hostName" value="#{ @redisUrl.getHost() }" />
+		<property name="port" value="#{ @redisUrl.getPort() }" />
+		<property name="password" value="#{ @redisUrl.getUserInfo().split(':')[1] }" />
+		<property name="timeout" value="2000" />
+		<!--property name="hostName" value="pub-redis-19301.us-east-1-3.2.ec2.garantiadata.com" />
 		<property name="port" value="19301" />
 		<property name="password" value="4HWLKX3tiCg8Zx2K" />
-		<property name="timeout" value="2000" />
+		<property name="timeout" value="2000" /-->
 	</bean>
 
 	<!-- redis template definition -->
