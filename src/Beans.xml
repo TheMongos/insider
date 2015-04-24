@@ -61,9 +61,9 @@
 	<!-- Jedis ConnectionFactory -->
 	<bean id="jedisConnFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<property name="hostName" value="#{ @redisUri.getHost() }" />
-		<property name="port" value="#{ @redisUri.getPort() }" />
-		<property name="password" value="#{ redisUri.getUserInfo().split(":",2)[1]) }"/>
+		<property name="hostName" value="pub-redis-19301.us-east-1-3.2.ec2.garantiadata.com" />
+		<property name="port" value="19301" />
+		<property name="password" value="4HWLKX3tiCg8Zx2K"/>
 		<property name="timeout" value="2000" />
 		<!--property name="hostName" value="localhost" />
 		<property name="port" value="6379" />
