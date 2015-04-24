@@ -66,7 +66,7 @@ myApp.directive('fallbackSrc', function () {
 
 myApp.controller('login', function($scope,$resource, $location){
 	$('#navigator').css("display","none");
-	var Login = $resource('/insider/request/login');
+	var Login = $resource('/request/login');
 	$scope.login = function (){
 		$scope.message ="";
 		$scope.messageShow = false;
@@ -89,7 +89,7 @@ myApp.controller('login', function($scope,$resource, $location){
 
 myApp.controller('signup', function($scope,$resource, $location){
 	$('#navigator').css("display","none");
-	var Login = $resource('/insider/request/signup');
+	var Login = $resource('/request/signup');
 	$scope.signup = function (myForm){
 		console.log(myForm);
 		if(myForm.emailField.$valid == false){
@@ -126,9 +126,9 @@ myApp.controller('signup', function($scope,$resource, $location){
 myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	var User;
 	if($routeParams.user_id){
-		User = $resource('/insider/request/user/:user_id', {user_id: $routeParams.user_id});
+		User = $resource('/request/user/:user_id', {user_id: $routeParams.user_id});
 	} else {
-		User = $resource('/insider/request/user/');
+		User = $resource('/request/user/');
 	}
 
 	User.get(function(res){
@@ -156,7 +156,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	});	
 
 	function getRanks(user_id){
-		var Ranks = $resource('/insider/request/rank/:user_id', {user_id: user_id});
+		var Ranks = $resource('/request/rank/:user_id', {user_id: user_id});
 		$scope.ranksArr =  Ranks.query();
 	}
 
@@ -173,7 +173,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("close review");
 			if ($scope.ranksArr[index].hasReview) {
 			} else {
-				var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+				var Review = $resource('/request/review/:review_id', {review_id: review_id});
 				Review.get(function(res){
 					$scope.ranksArr[index].reviewText = res.review_text;
 					$scope.ranksArr[index].hasReview = true;			
@@ -186,7 +186,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 
 	$scope.startFollowing = function(user_id){
 		if(!$scope.res.user.userDetails.isFollowing){
-			var Follow = $resource('/insider/request/user/follow/:user_id', {user_id: user_id});
+			var Follow = $resource('/request/user/follow/:user_id', {user_id: user_id});
 			Follow.save(function(res){
 				if(res.status == "success"){
 					$scope.followingLabel = "Following";
@@ -200,7 +200,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.logout = function(){
-		var Logout = $resource('/insider/request/logout');
+		var Logout = $resource('/request/logout');
 
 		Logout.save(function(res){
 			console.log(res)
@@ -217,7 +217,7 @@ myApp.controller('user', function($scope,$resource, $location, $routeParams){
 });
 
 myApp.controller('item', function($scope,$resource, $location, $routeParams){
-	var Item = $resource('/insider/request/item/:item_id', {item_id: $routeParams.item_id});
+	var Item = $resource('/request/item/:item_id', {item_id: $routeParams.item_id});
 	Item.get(function(res){
 		$scope.item = res;
 		console.log(res);
@@ -252,7 +252,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		$scope.message = "";
 		console.log($scope.myRank);
 		if($scope.myRank != 0){
-			var Rank = $resource('/insider/request/rank/:category_id/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank});
+			var Rank = $resource('/request/rank/:category_id/:item_id/:rank', {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank});
 			Rank.save(function(res){
 				console.log(res);
 			},
@@ -279,7 +279,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 		if($scope.reviewText) {
 			if($scope.myRank != 0){
 				var obj = {item_id: $scope.item.itemDetails.item_id, category_id: $scope.item.itemDetails.category_id , rank: $scope.myRank, review_text: $scope.reviewText};
-				var Rank = $resource('/insider/request/review');
+				var Rank = $resource('/request/review');
 				Rank.save(obj, function(res){
 					$scope.getReview(res.review_id);
 					$scope.userRank.review_id = res.review_id;
@@ -296,7 +296,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.getFollowingRanks = function(){
-		var Rank = $resource('/insider/request/rank/following/:item_id', {item_id : $scope.item.itemDetails.item_id});
+		var Rank = $resource('/request/rank/following/:item_id', {item_id : $scope.item.itemDetails.item_id});
 		$scope.ranksArr = Rank.query(function(res){
 			console.log(res);
 		},
@@ -306,7 +306,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	}
 
 	$scope.getFirstReview = function(review_id){
-		var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+		var Review = $resource('/request/review/:review_id', {review_id: review_id});
 		Review.get(function(res){
 			console.log(res);
 			$scope.reviewText = res.review_text;
@@ -329,7 +329,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("close review");
 			if ($scope.ranksArr[index].hasReview) {
 			} else {
-				var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+				var Review = $resource('/request/review/:review_id', {review_id: review_id});
 				Review.get(function(res){
 					$scope.ranksArr[index].reviewText = res.review_text;
 					$scope.ranksArr[index].hasReview = true;			
@@ -351,7 +351,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 			$(reviewBtn).html("close review");
 			if ($scope.ranksArr[index].hasReview) {
 			} else {
-				var Review = $resource('/insider/request/review/:review_id', {review_id: review_id});
+				var Review = $resource('/request/review/:review_id', {review_id: review_id});
 				Review.get(function(res){
 					$scope.ranksArr[index].reviewText = res.review_text;
 					$scope.ranksArr[index].hasReview = true;			
@@ -363,7 +363,7 @@ myApp.controller('item', function($scope,$resource, $location, $routeParams){
 	};
 
 	$scope.deleteReview = function() {
-		var Delete = $resource('/insider/request/review/:review_id/:item_id', { review_id: $scope.userRank.review_id , item_id: $scope.item.itemDetails.item_id });
+		var Delete = $resource('/request/review/:review_id/:item_id', { review_id: $scope.userRank.review_id , item_id: $scope.item.itemDetails.item_id });
 
 		Delete.remove(function(res){
 			$scope.reviewText = "";
@@ -401,7 +401,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 		$scope.showFollowing = false;
 
 		//activation check 
-		var All = $resource('/insider/request/best/:category_id', { category_id : $scope.selectedCat.id });
+		var All = $resource('/request/best/:category_id', { category_id : $scope.selectedCat.id });
 		$scope.itemsArr = All.query(function(res) {
 			console.log(res);
 		}, function(error) {
@@ -412,7 +412,7 @@ myApp.controller('top', function($scope,$resource, $location, $routeParams){
 	$scope.getTopFollowing = function() {
 		$scope.showFollowing = true;
 
-		var Following = $resource('/insider/request/best/following/:category_id', { category_id : $scope.selectedCat.id });
+		var Following = $resource('/request/best/following/:category_id', { category_id : $scope.selectedCat.id });
 		$scope.itemsArr = Following.query(function(res) {
 			console.log(res);
 		}, function(error) {
@@ -449,7 +449,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 	$scope.search = function(){
 		if($scope.searchText) {
 			if ($scope.isUser) { 
-				var SearchUser = $resource('/insider/request/search/user/:query', { query : $scope.searchText });
+				var SearchUser = $resource('/request/search/user/:query', { query : $scope.searchText });
 
 				$scope.userArr = SearchUser.query(function(res) {
 					console.log(res);
@@ -458,7 +458,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 					$location.path('/login').replace();
 				});
 			} else { 
-				var SearchItem = $resource('/insider/request/search/item/:query', { query : $scope.searchText });
+				var SearchItem = $resource('/request/search/item/:query', { query : $scope.searchText });
 
 				$scope.itemArr = SearchItem.query(function(res) {
 					console.log(res);
@@ -472,7 +472,7 @@ myApp.controller('search', function($scope,$resource, $location, $routeParams){
 });
 
 myApp.controller('following', function($scope,$resource, $location, $routeParams){
-	var Following = $resource('/insider/request/user/following/:user_id', {user_id: $routeParams.user_id});
+	var Following = $resource('/request/user/following/:user_id', {user_id: $routeParams.user_id});
 
 	$scope.followArr = Following.query(function(res){
 		console.log(res);
@@ -488,7 +488,7 @@ myApp.controller('following', function($scope,$resource, $location, $routeParams
 });
 
 myApp.controller('followers', function($scope,$resource, $location, $routeParams){
-	var Followers = $resource('/insider/request/user/followers/:user_id', {user_id: $routeParams.user_id});
+	var Followers = $resource('/request/user/followers/:user_id', {user_id: $routeParams.user_id});
 
 	$scope.followArr = Followers.query(function(res){
 		console.log(res);
@@ -508,7 +508,7 @@ myApp.controller('myFollowing', function($scope,$resource, $location, $routePara
 			}
 			$scope.$apply();
 		} else {
-			var Followers = $resource('/insider/request/user/following/:user_id', {user_id: $routeParams.user_id});
+			var Followers = $resource('/request/user/following/:user_id', {user_id: $routeParams.user_id});
 			deleteFollowers(function() {});
 			
 			$scope.followArr = Followers.query(function(res){
@@ -533,7 +533,7 @@ myApp.controller('myFollowers', function($scope,$resource, $location, $routePara
 			}
 			$scope.$apply();
 		} else {
-			var Followers = $resource('/insider/request/user/followers/:user_id', {user_id: $routeParams.user_id});
+			var Followers = $resource('/request/user/followers/:user_id', {user_id: $routeParams.user_id});
 			deleteFollowers(function() {});
 			
 			$scope.followArr = Followers.query(function(res){
