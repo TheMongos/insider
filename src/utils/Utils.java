@@ -26,7 +26,7 @@ import db.redis.RedisUtilsTemplate;
 
 public class Utils {
 	
-	private static ApplicationContext context;
+	private static ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 	// static {
 	// 	Connection connection = null;
 	// 	Statement statement = null;
