@@ -4,7 +4,7 @@
 	<groupId>com.insider</groupId>
 	<artifactId>insider</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<!--packaging>war</packaging-->
 	<dependencies>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
