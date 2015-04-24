@@ -27,20 +27,20 @@ import db.redis.RedisUtilsTemplate;
 public class Utils {
 	
 	private static ApplicationContext context;
-	static {
-		Connection connection = null;
-		Statement statement = null;
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "");
-			statement = connection.createStatement();
-			String sql = "create database if not exists insider";
-			statement.executeUpdate(sql);
-			context = new ClassPathXmlApplicationContext("Beans.xml");
-		} catch (Exception e) {
-			System.err.println("Severe Error: Can't load Beans.xml - fuck the system!");
-		}
-	}
+	// static {
+	// 	Connection connection = null;
+	// 	Statement statement = null;
+	// 	try {
+	// 		Class.forName("com.mysql.jdbc.Driver");
+	// 		connection = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "");
+	// 		statement = connection.createStatement();
+	// 		String sql = "create database if not exists insider";
+	// 		statement.executeUpdate(sql);
+	// 		context = new ClassPathXmlApplicationContext("Beans.xml");
+	// 	} catch (Exception e) {
+	// 		System.err.println("Severe Error: Can't load Beans.xml - fuck the system!");
+	// 	}
+	// }
 
 	public static Long addItem(byte category_id, String title, String year, String description, String other_data){
 		ItemJDBCTemplate itemJDBCTemplate = (ItemJDBCTemplate) context.getBean("itemJDBCTemplate");
