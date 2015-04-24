@@ -12,6 +12,32 @@
     		<constructor-arg value="#{systemEnvironment['REDISCLOUD_URL']}"/>
 	</bean>
 
+	<!-- Initialization for data source -->
+	<!--bean id="dataSource" class="db.mysql.DBConn"> </bean -->
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/insider" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+		<property name="jmxEnabled" value="true" />
+		<property name="testWhileIdle" value="false" />
+		<property name="testOnBorrow" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testOnReturn" value="false" />
+		<property name="validationInterval" value="30000" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+		<property name="maxActive" value="100" />
+		<property name="initialSize" value="10" />
+		<property name="maxWait" value="10000" />
+		<property name="removeAbandonedTimeout" value="60" />
+		<property name="minEvictableIdleTimeMillis" value="30000" />
+		<property name="minIdle" value="10" />
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="jdbcInterceptors"
+			value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer" />
+	</bean>
+
 	<!-- Definition for categoryJDBCTemplate bean -->
 	<bean id="categoryJDBCTemplate" class="db.mysql.CategoryJDBCTemplate">
 		<property name="dataSource" ref="dataSource" />
