@@ -11,6 +11,7 @@ public class Category {
 		this.category_name = category_name;
 	}*/
 	
+	
 	public byte getCategory_id() {
 		return category_id;
 	}
