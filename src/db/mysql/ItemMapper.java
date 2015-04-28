@@ -15,7 +15,7 @@ public class ItemMapper implements RowMapper<Item> {
 		item.setDescription(rs.getString("description"));
 		item.setOther_data(rs.getString("other_data"));
 		item.setCreated_ts(rs.getTimestamp("created_ts"));
-		item.setUpdated_ts(rs.getTimestamp("updated_ts"));
+		// item.setUpdated_ts(rs.getTimestamp("updated_ts"));
 		
 		return item;
 	}

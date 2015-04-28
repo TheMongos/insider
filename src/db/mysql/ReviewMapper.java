@@ -14,7 +14,7 @@ public class ReviewMapper implements RowMapper<Review> {
 		review.setItem_id(rs.getInt("item_id"));
 		review.setReview_text(rs.getString("review_text"));
 		review.setCreated_ts(rs.getTimestamp("created_ts"));
-		review.setUpdated_ts(rs.getTimestamp("updated_ts"));
+		// review.setUpdated_ts(rs.getTimestamp("updated_ts"));
 
 		return review;
 	   }

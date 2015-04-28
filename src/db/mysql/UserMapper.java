@@ -16,7 +16,7 @@ public class UserMapper implements RowMapper<User> {
 		user.setEmail(rs.getString("email"));
 		user.setPassword(rs.getString("password"));
 		user.setCreated_ts(rs.getTimestamp("created_ts"));
-		user.setUpdated_ts(rs.getTimestamp("updated_ts"));
+		// user.setUpdated_ts(rs.getTimestamp("updated_ts"));
 		
 		return user;
 	}
