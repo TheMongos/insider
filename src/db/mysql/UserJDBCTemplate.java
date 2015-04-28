@@ -33,7 +33,7 @@ public class UserJDBCTemplate implements UserDAO{
 				+ ", email CHAR(255) NOT NULL"
 				+ ", password CHAR(60) NOT NULL"
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
-				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+				//+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 				+ ", primary key (user_id)"
 				+ ", UNIQUE(username)"
 				+ ") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_bin;";

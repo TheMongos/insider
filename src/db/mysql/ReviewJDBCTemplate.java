@@ -31,7 +31,7 @@ public class ReviewJDBCTemplate implements ReviewDAO {
 				+ ", item_id INT NOT NULL "
 				+ ", review_text VARCHAR(500) NOT NULL "
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
-				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+				//+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 				+ ", primary key (review_id)"
 				+ ", FOREIGN KEY (user_id)"
 				+ "		REFERENCES User(user_id)"

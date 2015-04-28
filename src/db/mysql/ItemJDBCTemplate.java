@@ -35,7 +35,7 @@ public class ItemJDBCTemplate implements ItemDAO {
 				+ ", description VARCHAR(1200) NOT NULL"
 				+ ", other_data VARCHAR(1000) NOT NULL"
 				+ ", created_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
-				+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+				//+ ", updated_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 				+ ", primary key (item_id)"
 				+ ", FOREIGN KEY (category_id)"
 				+ "		REFERENCES Category(category_id)"
